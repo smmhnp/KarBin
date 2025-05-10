@@ -46,7 +46,7 @@ class TaskController extends Controller
 
     public function board()
     {
-
+        
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
         }

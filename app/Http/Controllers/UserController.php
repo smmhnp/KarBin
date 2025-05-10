@@ -23,6 +23,10 @@ class UserController extends ApiController
 
     public function loginSubmit(Request $request)
     {
+        if (Auth::check()) {
+            return redirect()->route('dashboard');
+        }
+
         $credentials = $request->only('email', 'password');
 
         $validator = Validator::make($credentials, [
@@ -46,11 +50,27 @@ class UserController extends ApiController
 
     public function create()
     {
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
+        }
+
+        if (Auth::user()->role != 'admin'){
+            return redirect()->route('dashboard');
+        }
+
         return view('users.register');
     }
 
     public function store(Request $request)
     {
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
+        }
+
+        if (Auth::user()->role != 'admin'){
+            return redirect()->route('dashboard');
+        }
+
         $validated = $request->validate([
             'firstname' => 'required | string | max:255',
             'lastname' => 'required | string | max:255',
@@ -79,6 +99,10 @@ class UserController extends ApiController
 
     public function logout(Request $request)
     {
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
+        }
+
         Auth::logout();
 
         $request->session()->invalidate();
