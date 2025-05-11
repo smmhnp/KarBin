@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 
 class TaskController extends Controller
@@ -92,30 +93,26 @@ class TaskController extends Controller
     public function edit($id){
 
         $task = Task::find($id);
-        $user = User::find($task -> user_id);
-
-        // if ($task->user_id != Auth::user()->id) {
-        //     return redirect()->route('dashboard')->with('error', 'شما دسترسی به این تسک را ندارید');
-        // }
+        $users = User::all();
 
         $data = [
            'task' => $task,
-           'user' => $user 
+           'users' => $users 
         ];
 
         return view('tasks.edit', ['data' => $data]);
     }
 
-    public function editSubmit($id)
+    public function editSubmit(Request $request, $id)
     {
         $task = Task::findOrFail($id);
-        
-        // if ($task->user_id != Auth::user()->id()) {
-        //     return redirect()->route('tasks.index')->with('error', 'شما دسترسی به این تسک را ندارید');
+
+        // if ($task->user_id !== Auth::id()) {
+        //     return redirect()->route('tasks.index')->with('error', 'شما دسترسی به این تسک را ندارید.');
         // }
-    
-        if (request()->isMethod('POST')) {
-            $validator = Validator::make(request()->all(), [
+
+        if ($request->isMethod('post')) {
+            $validator = Validator::make($request->all(), [
                 'title' => 'required|string|max:255',
                 'project_name' => 'required|string|max:255',
                 'content' => 'required|string',
@@ -123,33 +120,40 @@ class TaskController extends Controller
                 'preference' => 'required|string|max:255',
                 'deadline' => 'required|date',
                 'status' => 'required|string|max:255',
+                'attachment' => 'nullable|file|max:5120',
             ], [
                 'required' => 'فیلد :attribute الزامی است',
                 'max' => 'فیلد :attribute نباید بیشتر از :max کاراکتر باشد',
-                'date' => 'فیلد :attribute باید یک تاریخ معتبر باشد'
+                'date' => 'فیلد :attribute باید یک تاریخ معتبر باشد',
             ]);
-    
+
             if ($validator->fails()) {
-                return redirect()->back()->withErrors($validator)->withInput();
+                return back()->withErrors($validator)->withInput();
             }
-    
-            $updated = $task->update([
-                'title' => request('title'),
-                'project_name' => request('project_name'),
-                'content' => request('content'),
-                'undertaking' => request('undertaking'),
-                'preference' => request('preference'),
-                'deadline' => request('deadline'),
-                'status' => request('status'),
+
+            $attachmentPath = $task->attachment_path;
+            if ($request->hasFile('attachment') && $request->file('attachment')->isValid()) {
+                if ($attachmentPath && Storage::exists($attachmentPath)) {
+                    Storage::delete($attachmentPath);
+                }
+
+                $attachmentPath = $request->file('attachment')->store('private/tasks', 'local');
+            }
+
+            $task->update([
+                'title' => $request->input('title'),
+                'project_name' => $request->input('project_name'),
+                'content' => $request->input('content'),
+                'undertaking' => $request->input('undertaking'),
+                'preference' => $request->input('preference'),
+                'deadline' => $request->input('deadline'),
+                'status' => $request->input('status'),
+                'attachment_path' => $attachmentPath,
             ]);
-    
-            if ($updated) {
-                return redirect()->route('dashboard')->with('success', 'تسک با موفقیت ویرایش شد');
-            }
-    
-            return back()->with('error', 'خطا در ویرایش تسک');
+
+            return redirect()->route('dashboard')->with('success', 'تسک با موفقیت ویرایش شد');
         }
-    
+
         return view('tasks.edit', compact('task'));
     }
 
@@ -160,12 +164,13 @@ class TaskController extends Controller
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
         }
-
-        return view('tasks.add');
+        $users = User::all();
+        
+        return view('tasks.add', ['users' => $users]);
     }
 
-    public function addsubmit(Request $request){
-
+    public function addsubmit(Request $request)
+    {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'project_name' => 'required|string|max:255',
@@ -174,20 +179,40 @@ class TaskController extends Controller
             'preference' => 'required|string|max:255',
             'deadline' => 'required|date',
             'status' => 'required|string|max:255',
+            'attachment' => 'nullable|file|max:5120',
+        ], [
+            'title.required' => 'لطفاً عنوان تسک را وارد کنید.',
+            'title.max' => 'عنوان تسک نباید بیشتر از ۲۵۵ کاراکتر باشد.',
+            'project_name.required' => 'لطفاً نام پروژه را وارد کنید.',
+            'content.required' => 'لطفاً توضیحات تسک را وارد کنید.',
+            'undertaking.required' => 'لطفاً مسئولیت را وارد کنید.',
+            'preference.required' => 'لطفاً ترجیحات را وارد کنید.',
+            'deadline.required' => 'لطفاً تاریخ انقضا را وارد کنید.',
+            'deadline.date' => 'لطفاً تاریخ را به صورت صحیح وارد کنید.',
+            'status.required' => 'لطفاً وضعیت تسک را وارد کنید.',
+            'attachment.file' => 'فایل آپلودی باید یک فایل معتبر باشد.',
+            'attachment.max' => 'حجم فایل نباید بیشتر از ۵ مگابایت باشد.',
         ]);
 
-        $user = Task::create([
-            'user_id' => Auth::user()->id,
+        $attachmentPath = null;
+
+        if ($request->hasFile('attachment')) {
+            $attachmentPath = $request->file('attachment')->store('private/tasks', 'local');
+        }
+
+        Task::create([
+            'user_id' => Auth::id(),
             'title' => $validated['title'],
             'project_name' => $validated['project_name'],
             'content' => $validated['content'],
             'undertaking' => $validated['undertaking'],
             'preference' => $validated['preference'],
             'deadline' => $validated['deadline'],
-            'status' => ($validated['status']),
+            'status' => $validated['status'],
+            'attachment_path' => $attachmentPath,
         ]);
 
-        return redirect()->route('dashboard')->with('success', ',ورود با موفقیت انجام شد');
+        return redirect()->route('dashboard')->with('success', 'تسک با موفقیت اضافه شد.');
     }
 
 
@@ -198,8 +223,8 @@ class TaskController extends Controller
         try {
             $task = Task::findOrFail($id);
 
-            if ($task->user_id != Auth::id()) {
-                return redirect()->route('tasks.index')->with('error', 'شما مجاز به حذف این تسک نیستید.');
+            if ($task->attachment_path && Storage::exists($task->attachment_path)) {
+                Storage::delete($task->attachment_path);
             }
 
             $task->delete();
@@ -212,4 +237,25 @@ class TaskController extends Controller
             return redirect()->route('dashboard')->with('error', 'خطا در حذف تسک: ' . $e->getMessage());
         }
     }
+
+
+    //................................................download...........................
+
+     public function webdownload($id)
+    {
+        $task = Task::findOrFail($id);
+
+        if (!$task->attachment_path) {
+            return response()->json(['message' => 'فایل پیوست وجود ندارد'], Response::HTTP_NOT_FOUND);
+        }
+
+        $filePath = $task->attachment_path;
+
+        if (!Storage::disk('local')->exists($filePath)) {
+            return response()->json(['message' => 'فایل یافت نشد'], Response::HTTP_NOT_FOUND);
+        }
+
+        return Storage::disk('local')->download($filePath);
+    }
+
 }

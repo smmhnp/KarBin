@@ -35,6 +35,9 @@ Route::group(['middleware' => 'auth:api'], function()
     
     Route::post('/task/edit/{id}', [TaskApiController::class, 'editSubmit'])->name('editSubmit');
     
-    Route::post('/task/add', [TaskApiController::class, 'store'])->middleware('auth:sanctum');
+    Route::post('/task/add', [TaskApiController::class, 'store']);
+
+    Route::get('/download/{id}', [TaskApiController::class, 'download']);
+
 });
 

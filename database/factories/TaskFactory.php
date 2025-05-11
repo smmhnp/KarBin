@@ -17,14 +17,15 @@ class TaskFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => fake()->numberBetween(1, 4),
-            'title' => fake()->word(),
+            'user_id' => fake()->numberBetween(1, 3),
+            'title' => fake()->randomElement(['login', 'database', 'form', 'server']),
             'project_name' => fake()->randomElement(['alpha', 'beta', 'omega', 'teta']),
             'content' => fake()->paragraph(),
-            'undertaking' => fake()->randomElement(['ali', 'hasan', 'ahmad', 'admin']),
-            'preference' => fake()->randomElement(['بالا', 'متوسط', 'کم']),
+            'undertaking' => fake()->randomElement(['ali', 'ahmad', 'admin']),
+            'preference' => fake()->randomElement(['بالا', 'متوسط', 'پایین']),
             'deadline' => fake()->date(),
-            'status' => fake()->randomElement(['برای انجام', ' انجام شده', 'بازبینی', 'در حال انجام'])
+            'status' => fake()->randomElement(['برای انجام', ' انجام شده', 'بازبینی', 'در حال انجام']),
+            'attachment_path' => fake()->filePath()
         ];
     }
 }

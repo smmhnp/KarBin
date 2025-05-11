@@ -36,8 +36,10 @@
                 <div> 
                     <h4><i class="far fa-clock"></i> زمان ثبت</h4> 
                     <p>{{ $data['task'] -> created_at }}</p> 
-                </div>
+                </div>                
             </div>
+            
+            <a href="{{ route('file.download', ['id' => $data['task']->id]) }}" class="btn btn-success">دانلود فایل</a>
 
             <div class="comments-section">
                 <h4><i class="fas fa-comments"></i>بحث و گفتگو (1)</h4>

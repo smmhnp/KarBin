@@ -10,6 +10,9 @@ use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 
 
@@ -46,18 +49,14 @@ class TaskApiController extends ApiController
 
     //................................................edit...............................
 
-    public function editSubmit(Request $request, $id)
+  public function editSubmit(Request $request, $id)
     {
         $task = Task::find($id);
 
         if (!$task) {
             return $this->ResponseError('تسک پیدا نشد', 404);
         }
-
-        // بررسی مجوز کاربر (در صورت نیاز)
-        // if ($task->user_id != Auth::id()) {
-        //     return $this->ResponseError('شما مجاز به ویرایش این تسک نیستید', 403);
-        // }
+        
 
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
@@ -67,19 +66,35 @@ class TaskApiController extends ApiController
             'preference' => 'required|string|max:255',
             'deadline' => 'required|date',
             'status' => 'required|string|max:255',
+            'attachment' => 'nullable|file|max:5120',
         ], [
             'required' => 'فیلد :attribute الزامی است',
             'max' => 'فیلد :attribute نباید بیشتر از :max کاراکتر باشد',
-            'date' => 'فیلد :attribute باید یک تاریخ معتبر باشد'
+            'date' => 'فیلد :attribute باید یک تاریخ معتبر باشد',
+            'attachment.file' => 'فایل پیوست باید یک فایل معتبر باشد',
+            'attachment.max' => 'حجم فایل پیوست نباید بیشتر از ۵ مگابایت باشد',
         ]);
 
         if ($validator->fails()) {
             return $this->ResponseError($validator->errors(), 422);
         }
 
+        $attachmentPath = $task->attachment_path;
+        if ($request->hasFile('attachment')) {
+            $file = $request->file('attachment');
+            if ($file->isValid()) {
+                if ($attachmentPath && Storage::exists($attachmentPath)) {
+                    Storage::delete($attachmentPath);
+                }
+                $attachmentPath = $file->store('private/tasks', 'local');
+            } else {
+                return $this->ResponseError('فایل پیوست معتبر نیست', 400);
+            }
+        }
+
         $task->update($request->only([
             'title', 'project_name', 'content', 'undertaking', 'preference', 'deadline', 'status'
-        ]));
+        ]) + ['attachment_path' => $attachmentPath]);
 
         return $this->ResponseSuccess(['message' => 'تسک با موفقیت ویرایش شد', 'task' => $task], 200);
     }
@@ -97,10 +112,21 @@ class TaskApiController extends ApiController
             'preference' => 'required|string|max:255',
             'deadline' => 'required|date',
             'status' => 'required|string|max:255',
+            'attachment' => 'nullable|file|max:5120',
         ]);
 
         if ($validator->fails()) {
             return $this->ResponseError($validator->errors(), 422);
+        }
+
+        $attachmentPath = null;
+        if ($request->hasFile('attachment')) {
+            $file = $request->file('attachment');
+            if ($file->isValid()) {
+                $attachmentPath = $file->store('private/tasks', 'local');
+            } else {
+                return $this->ResponseError('File is invalid or not uploaded', 400);
+            }
         }
 
         $task = Task::create([
@@ -112,10 +138,29 @@ class TaskApiController extends ApiController
             'preference' => $request->preference,
             'deadline' => $request->deadline,
             'status' => $request->status,
+            'attachment_path' => $attachmentPath,
         ]);
 
-        return $this->ResponseSuccess(['message' => 'تسک با موفقیت ایجاد شد', 'task' => $task], 201);
+        return $this->ResponseSuccess(['message' => 'Task successfully created', 'task' => $task], 201);
     }
 
 
+    //................................................download...........................
+
+    public function download($id)
+    {
+        $task = Task::findOrFail($id);
+
+        if (!$task->attachment_path) {
+            return response()->json(['message' => 'فایل پیوست وجود ندارد'], Response::HTTP_NOT_FOUND);
+        }
+
+        $filePath = $task->attachment_path;
+
+        if (!Storage::disk('local')->exists($filePath)) {
+            return response()->json(['message' => 'فایل یافت نشد'], Response::HTTP_NOT_FOUND);
+        }
+
+        return Storage::disk('local')->download($filePath);
+    }
 }

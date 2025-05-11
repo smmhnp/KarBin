@@ -5,7 +5,7 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use Symfony\Component\HttpKernel\Profiler\Profile;
 
-Route::get('/', [UserController::class, 'login'])->name('main');
+Route::get('/', [TaskController::class, 'dashboard'])->name('main');
 
 Route::get('/users/login', [UserController::class, 'login'])->name('login');
 Route::post('/users/login', [UserController::class, 'loginSubmit'])->name('login.submit');
@@ -37,3 +37,6 @@ Route::delete('/tasks/{id}', [TaskController::class, 'destroy'])->name('tasks.de
 Route::get('/board', [TaskController::class, 'board'])->name('board');
 
 Route::get('/project-list', [TaskController::class, 'list'])->name('project');
+
+Route::get('/download/{id}', [TaskController::class, 'webDownload'])->name('file.download');
+

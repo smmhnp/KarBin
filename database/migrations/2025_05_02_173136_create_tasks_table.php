@@ -22,6 +22,7 @@ return new class extends Migration
             $table-> string('preference');
             $table-> date('deadline');
             $table-> string('status');
+            $table->string('attachment_path')->nullable();
             $table->timestamps();
         });
     }
