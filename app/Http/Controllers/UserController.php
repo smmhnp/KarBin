@@ -31,7 +31,7 @@ class UserController extends ApiController
 
         $validator = Validator::make($credentials, [
             'email' => 'required | email',
-            'password' => 'required | min:5',
+            'password' => 'required | min:6',
         ]);
 
         if ($validator->fails()) {
@@ -54,26 +54,26 @@ class UserController extends ApiController
 
     public function create()
     {
-        // if (!Auth::check()) {
-        //     return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
-        // }
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
+        }
 
-        // if (Auth::user()->role != 'admin'){
-        //     return redirect()->route('dashboard');
-        // }
+        if (Auth::user()->role != 'admin'){
+            return redirect()->route('dashboard');
+        }
 
         return view('users.register');
     }
 
     public function store(Request $request)
     {
-        // if (!Auth::check()) {
-        //     return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
-        // }
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
+        }
 
-        // if (Auth::user()->role != 'admin'){
-        //     return redirect()->route('dashboard');
-        // }
+        if (Auth::user()->role != 'admin'){
+            return redirect()->route('dashboard');
+        }
 
         $validated = $request->validate([
             'firstname' => 'required | string | max:255',
@@ -96,7 +96,7 @@ class UserController extends ApiController
             'password' => Hash::make($validated['password']),
         ]);
 
-        return view('users/login', ['message' => 'successfuly register!']);
+        return view('users/profile', ['message' => 'successfuly register!']);
     }
 
 
@@ -137,7 +137,7 @@ class UserController extends ApiController
 
         $validatedData = $request->validate([
             'current_password' => 'required',
-            'new_password' => 'required|min:8',
+            'new_password' => 'required|min:6',
             'confirm_new_password' => 'required|same:new_password',
         ]);
 
@@ -153,7 +153,7 @@ class UserController extends ApiController
             'password' => Hash::make($request->new_password)
         ]);
 
-        return back()->with('success', 'رمز عبور با موفقیت تغییر یافت');
+        return redirect()->route('dashboard')->with('success', 'رمز عبور با موفقیت تغییر یافت');
     }
     
 
