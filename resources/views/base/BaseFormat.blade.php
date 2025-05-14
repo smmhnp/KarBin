@@ -21,7 +21,7 @@
 
     <!-- Footer (Persistent Layout Component) -->
     <footer style="text-align: center; padding: 30px 0; margin-top: 50px; border-top: 1px solid var(--border-color-light); color: var(--text-muted); font-size: 0.85rem;">
-        سیستم مدیریت وظایف TaskFlow &copy; ۱۴۰۴ - تمامی حقوق محفوظ است.
+        سیستم مدیریت وظایف KarBin &copy; ۱۴۰۴ - تمامی حقوق محفوظ است.
     </footer>
 
     <!-- JavaScript for Tab Navigation and Filters -->

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -161,9 +162,11 @@ class TaskController extends Controller
     //................................................add................................
 
     public function add(){
+
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
         }
+
         $users = User::all();
         
         return view('tasks.add', ['users' => $users]);
@@ -255,7 +258,7 @@ class TaskController extends Controller
             return response()->json(['message' => 'فایل یافت نشد'], Response::HTTP_NOT_FOUND);
         }
 
-        return Storage::disk('local')->download($filePath);
+        return Storage::download($filePath);
     }
 
 }
