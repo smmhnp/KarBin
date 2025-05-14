@@ -73,7 +73,7 @@
             </div>
 
             @php
-                $to_do = 0;
+                $todo = 0;
                 $progress = 0;
                 $review = 0;
                 $done = 0;
@@ -84,7 +84,7 @@
                     $status = $task->status;
                     switch ($status) {
                         case 'برای انجام':
-                            $to_do++;
+                            $todo++;
                             break;
                         case 'در حال انجام':
                             $progress++;
@@ -102,9 +102,9 @@
 
             <div class="workflow-board-container">
                 <!-- Stage: To Do -->
-                @if ($to_do > 0)
+                @if ($todo > 0)
                     <div class="workflow-stage">
-                        <h3 class="stage-title"><i class="fas fa-inbox"></i> برای انجام <span class="task-count">({{ $to_do }})</span></h3>
+                        <h3 class="stage-title"><i class="fas fa-inbox"></i> برای انجام <span class="task-count">({{ $todo }})</span></h3>
                         
                         <div class="stage-tasks" id="todo-tasks">
                             @foreach ($tasks as $task)
@@ -112,7 +112,7 @@
                                     <div class="task-card-horizontal" data-priority="high" data-project="alpha" data-assignee="DevLead">
                                         <a href="{{ route('task.view', ['id' => $task->id]) }}" class="task-card-title">{{ $task -> project_name }}</a>
                                         <div class="task-card-meta">
-                                            <span class="badge badge-priority-<?php //color_preference_style($task -> preference); ?>">{{ $task -> preference }}</span>
+                                            <span class="badge badge-priority-{{ color_preference_style ($task -> preference) }}">{{ $task -> preference }}</span>
                                             <div class="task-card-assignee">
                                                 <div class="task-card-avatar" style="background-color: var(--danger-color);">
                                                 {{ $task -> undertaking }}
@@ -139,7 +139,7 @@
                                     <div class="task-card-horizontal" data-priority="high" data-project="alpha" data-assignee="DevLead">
                                         <a href="{{ route('task.view', ['id' => $task->id]) }}" class="task-card-title">{{ $task -> project_name }}</a>
                                         <div class="task-card-meta">
-                                            <span class="badge badge-priority-<?php //color_preference_style($task -> preference); ?>">{{ $task -> preference }}</span>
+                                            <span class="badge badge-priority-{{ color_preference_style ($task -> preference) }}">{{ $task -> preference }}</span>
                                             <div class="task-card-assignee">
                                                 <div class="task-card-avatar" style="background-color: var(--danger-color);">
                                                 {{ $task -> undertaking }}
@@ -166,7 +166,7 @@
                                     <div class="task-card-horizontal" data-priority="high" data-project="alpha" data-assignee="DevLead">
                                         <a href="{{ route('task.view', ['id' => $task->id]) }}" class="task-card-title">{{ $task -> project_name }}</a>
                                         <div class="task-card-meta">
-                                            <span class="badge badge-priority-<?php //color_preference_style($task -> preference); ?>">{{ $task -> preference }}</span>
+                                            <span class="badge badge-priority-{{ color_preference_style ($task -> preference) }}">{{ $task -> preference }}</span>
                                             <div class="task-card-assignee">
                                                 <div class="task-card-avatar" style="background-color: var(--danger-color);">
                                                 {{ $task -> undertaking }}
@@ -193,7 +193,7 @@
                                     <div class="task-card-horizontal" data-priority="high" data-project="alpha" data-assignee="DevLead">
                                         <a href="{{ route('task.view', ['id' => $task->id]) }}" class="task-card-title">{{ $task -> project_name }}</a>
                                         <div class="task-card-meta">
-                                            <span class="badge badge-priority-<?php //color_preference_style($task -> preference); ?>">{{ $task -> preference }}</span>
+                                            <span class="badge badge-priority-{{ color_preference_style ($task -> preference) }}">{{ $task -> preference }}</span>
                                             <div class="task-card-assignee">
                                                 <div class="task-card-avatar" style="background-color: var(--danger-color);">
                                                 {{ $task -> undertaking }}

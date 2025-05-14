@@ -31,7 +31,7 @@
                                 <td>{{ $user->firstname . " " . $user->lastname  }}</td> 
                                 <td>{{ $user -> nickname }}</td> 
                                 <td>{{ $user -> email }}</td> 
-                                <td>{{ $user -> role }}</td> 
+                                <td>{{ Role ($user -> role) }}</td> 
                                 <td>
                                     <span class="badge badge-status-active">فعال</span>
                                 </td> 

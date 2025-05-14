@@ -6,7 +6,7 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h3 class="card-title" style="margin-bottom: 0;">{{ $data['task'] -> title }}</h3>
-                <span class="badge badge-status-<?php //color_status_style($data['task'] -> status); ?>">{{ $data['task'] -> status }}</span>
+                <span class="badge badge-status-{{ color_status_style ($data['task'] -> status) }}">{{ $data['task'] -> status }}</span>
             </div>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px 35px; margin-bottom: 40px; padding-top: 25px;">
                 <div> 
@@ -18,7 +18,7 @@
                 <div> 
                     <h4><i class="fas fa-flag"></i> اولویت</h4> 
                     <p>
-                        <span class="badge badge-priority-<?php //color_preference_style($data['task'] -> preference); ?>">{{ $data['task'] -> preference }}</span>
+                        <span class="badge badge-priority-{{ color_preference_style ($data['task'] -> preference) }}">{{ $data['task'] -> preference }}</span>
                     </p> 
                 </div>
                 <div> 

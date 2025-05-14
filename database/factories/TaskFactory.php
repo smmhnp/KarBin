@@ -24,7 +24,7 @@ class TaskFactory extends Factory
             'undertaking' => fake()->randomElement(['ali', 'ahmad', 'admin']),
             'preference' => fake()->randomElement(['بالا', 'متوسط', 'پایین']),
             'deadline' => fake()->date(),
-            'status' => fake()->randomElement(['برای انجام', ' انجام شده', 'بازبینی', 'در حال انجام']),
+            'status' => fake()->randomElement(['برای انجام', 'انجام شده', 'بازبینی', 'در حال انجام']),
             'attachment_path' => fake()->filePath()
         ];
     }

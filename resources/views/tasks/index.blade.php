@@ -121,9 +121,9 @@
                                 <td>{{ $item['title'] }}</td> 
                                 <td><a href="#task-detail-screen">{{ $item['project_name'] }}</a></td> 
                                 <td class="user-nickname-cell">{{ $item['undertaking'] }}</td> 
-                                <td><span class="badge"></span>{{ $item['preference'] }}</td> 
+                                <td><span class="badge badge-priority-{{ color_preference_style ($item -> preference) }}">{{ $item['preference'] }}</span></td> 
                                 <td>{{ $item['deadline'] }}</td> 
-                                <td><span class="badge"></span>{{ $item['status'] }}</td> 
+                                <td><span class="badge badge-status-{{ color_status_style ($item -> status) }}">{{ $item['status'] }}</span></td> 
                                 <td>
                                     <div class="button-group"> 
                                         <a href="{{ route('task.view', ['id' => $item->id]) }}" class="btn btn-sm btn-secondary" title="مشاهده"><i class="fas fa-eye"></i></a>
