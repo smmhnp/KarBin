@@ -15,14 +15,14 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table-> string('title');
-            $table-> string('project_name');
-            $table-> string('content');
-            $table-> string('undertaking');
-            $table-> string('preference');
+            $table-> text('title');
+            $table-> text('project_name');
+            $table-> text('content');
+            $table-> text('undertaking');
+            $table-> text('preference');
             $table-> date('deadline');
-            $table-> string('status');
-            $table->string('attachment_path')->nullable();
+            $table-> text('status');
+            $table->text('attachment_path')->nullable();
             $table->timestamps();
         });
     }

@@ -35,14 +35,18 @@ class UserController extends ApiController
         ]);
 
         if ($validator->fails()) {
-            return redirect() -> back() -> withErrors($validator) -> withInput();
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        if (Auth::attempt($credentials)) {
-            return redirect()->route('dashboard')->with('success', ',ورود با موفقیت انجام شد');
-        } else {
-            return view('users/login', ['message' => "email or password invalid!"]);
+        $emailHash = hash('sha256', $credentials['email']);
+        $user = User::where('email_hash', $emailHash)->first();
+
+        if (!$user || !Hash::check($credentials['password'], $user->password)) {
+            return back()->withErrors(['message' => 'ایمیل یا رمز عبور اشتباه است'])->withInput();
         }
+
+        Auth::login($user);
+        return redirect()->route('dashboard')->with('success', 'ورود با موفقیت انجام شد');
     }
 
     
@@ -50,26 +54,26 @@ class UserController extends ApiController
 
     public function create()
     {
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
-        }
+        // if (!Auth::check()) {
+        //     return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
+        // }
 
-        if (Auth::user()->role != 'admin'){
-            return redirect()->route('dashboard');
-        }
+        // if (Auth::user()->role != 'admin'){
+        //     return redirect()->route('dashboard');
+        // }
 
         return view('users.register');
     }
 
     public function store(Request $request)
     {
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
-        }
+        // if (!Auth::check()) {
+        //     return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
+        // }
 
-        if (Auth::user()->role != 'admin'){
-            return redirect()->route('dashboard');
-        }
+        // if (Auth::user()->role != 'admin'){
+        //     return redirect()->route('dashboard');
+        // }
 
         $validated = $request->validate([
             'firstname' => 'required | string | max:255',
@@ -88,6 +92,7 @@ class UserController extends ApiController
             'role' => $validated['role'],
             'unit' => $validated['unit'],
             'email' => $validated['email'],
+            'email_hash' => hash('SHA256', $validated['email']),
             'password' => Hash::make($validated['password']),
         ]);
 

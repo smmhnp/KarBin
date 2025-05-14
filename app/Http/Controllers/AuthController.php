@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
 class AuthController extends ApiController
@@ -12,14 +13,19 @@ class AuthController extends ApiController
     {
         $credentials = $request->only('email', 'password');
 
-        if ($token = JWTAuth::attempt($credentials)) {
-            return $this -> ResponseSuccess([
-                'success' => true,
-                'token' => $token
-            ], 200);
+        $emailHash = hash('sha256', $credentials['email']);
+        $user = User::where('email_hash', $emailHash)->first();
+
+        if (!$user || !Hash::check($credentials['password'], $user->password)) {
+            return $this->ResponseError(['error' => 'Invalid credentials'], 401);
         }
 
-        return $this -> ResponseError(['error' => 'Invalid credentials'], 401);
+        $token = JWTAuth::fromUser($user);
+
+        return $this->ResponseSuccess([
+            'success' => true,
+            'token' => $token
+        ], 200);
     }
 }
 

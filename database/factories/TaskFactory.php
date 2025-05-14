@@ -17,7 +17,7 @@ class TaskFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => fake()->numberBetween(1, 3),
+            'user_id' => '1',
             'title' => fake()->randomElement(['login', 'database', 'form', 'server']),
             'project_name' => fake()->randomElement(['alpha', 'beta', 'omega', 'teta']),
             'content' => fake()->paragraph(),

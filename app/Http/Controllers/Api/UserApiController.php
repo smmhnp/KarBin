@@ -46,6 +46,7 @@ class UserApiController extends ApiController
                 'role' => $validated['role'],
                 'unit' => $validated['unit'],
                 'email' => $validated['email'],
+                'email_hash' => hash('SHA256', $validated['email']),
                 'password' => Hash::make($validated['password']),
             ]);
 

@@ -23,7 +23,7 @@ class User extends Authenticatable implements JWTSubject
     }
 
     protected $fillable = [
-        'firstname', 'lastname', 'nickname', 'role', 'unit', 'email', 'password'
+        'firstname', 'lastname', 'nickname', 'role', 'unit', 'email', 'email_hash', 'password'
     ];
     
 
@@ -32,12 +32,18 @@ class User extends Authenticatable implements JWTSubject
         'remember_token',
     ];
 
-
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+
+            'firstname' => 'encrypted',
+            'lastname' => 'encrypted',
+            'nickname' => 'encrypted',
+            'role' => 'encrypted',
+            'unit' => 'encrypted',
+            'email' => 'encrypted',
         ];
     }
 }
