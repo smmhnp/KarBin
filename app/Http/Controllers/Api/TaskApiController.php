@@ -161,6 +161,6 @@ class TaskApiController extends ApiController
             return response()->json(['message' => 'فایل یافت نشد'], Response::HTTP_NOT_FOUND);
         }
 
-        return Storage::disk('local')->download($filePath);
+        return Storage::download($filePath);
     }
 }
