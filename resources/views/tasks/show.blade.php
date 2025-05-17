@@ -27,7 +27,7 @@
                 </div>
                 <div> 
                     <h4><i class="far fa-calendar-alt"></i> مهلت</h4> 
-                    <p>{{ $data['task'] -> deadline }}</p> 
+                    <p>{{ $data['task'] -> deadline -> toDateString() }}</p> 
                 </div>
                 <div> 
                     <h4><i class="fas fa-project-diagram"></i> پروژه</h4> 
@@ -35,7 +35,7 @@
                 </div>
                 <div> 
                     <h4><i class="far fa-clock"></i> زمان ثبت</h4> 
-                    <p>{{ $data['task'] -> created_at }}</p> 
+                    <p>{{ $data['task'] -> created_at -> toDateString() }}</p> 
                 </div>                
             </div>
             

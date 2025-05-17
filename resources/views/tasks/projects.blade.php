@@ -29,7 +29,7 @@
                                 </td> 
                                 <td>3 / 4</td> 
                                 <td>{{ $project -> undertaking }}</td> 
-                                <td>{{ $project -> deadline }}</td> 
+                                <td>{{ $project -> deadline -> toDateString() }}</td> 
                                 <td>
                                     <div class="button-group">
                                         <a href="{{ route('task.view', ['id' => $project->id]) }}" class="btn btn-sm btn-secondary" title="نمایش"><i class="fas fa-eye"></i></a> 

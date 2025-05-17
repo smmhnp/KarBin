@@ -119,7 +119,7 @@
                                                 </div>
                                                 <span>{{ $task -> undertaking }}</span>
                                             </div>
-                                            <div class="task-card-due-date"><i class="far fa-calendar-alt"></i><span>{{ $task -> deadline }}</span></div>
+                                            <div class="task-card-due-date"><i class="far fa-calendar-alt"></i><span>{{ $task->deadline->toDateString() }}</span></div>
                                         </div>
                                     </div>
                                 @endif
@@ -146,7 +146,7 @@
                                                 </div>
                                                 <span>{{ $task -> undertaking }}</span>
                                             </div>
-                                            <div class="task-card-due-date"><i class="far fa-calendar-alt"></i><span>{{ $task -> deadline }}</span></div>
+                                            <div class="task-card-due-date"><i class="far fa-calendar-alt"></i><span>{{ $task->deadline->toDateString() }}</span></div>
                                         </div>
                                     </div>
                                 @endif
@@ -173,7 +173,7 @@
                                                 </div>
                                                 <span>{{ $task -> undertaking }}</span>
                                             </div>
-                                            <div class="task-card-due-date"><i class="far fa-calendar-alt"></i><span>{{ $task -> deadline }}</span></div>
+                                            <div class="task-card-due-date"><i class="far fa-calendar-alt"></i><span>{{ $task->deadline->toDateString() }}</span></div>
                                         </div>
                                     </div>
                                 @endif
@@ -200,7 +200,7 @@
                                                 </div>
                                                 <span>{{ $task -> undertaking }}</span>
                                             </div>
-                                            <div class="task-card-due-date"><i class="far fa-calendar-alt"></i><span>{{ $task -> deadline }}</span></div>
+                                            <div class="task-card-due-date"><i class="far fa-calendar-alt"></i><span>{{ $task->deadline->toDateString() }}</span></div>
                                         </div>
                                     </div>
                                 @endif

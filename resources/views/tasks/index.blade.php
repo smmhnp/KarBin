@@ -122,7 +122,7 @@
                                 <td><a href="#task-detail-screen">{{ $item['project_name'] }}</a></td> 
                                 <td class="user-nickname-cell">{{ $item['undertaking'] }}</td> 
                                 <td><span class="badge badge-priority-{{ color_preference_style ($item -> preference) }}">{{ $item['preference'] }}</span></td> 
-                                <td>{{ $item['deadline'] }}</td> 
+                                <td>{{ $item['deadline']->toDateString() }}</td> 
                                 <td><span class="badge badge-status-{{ color_status_style ($item -> status) }}">{{ $item['status'] }}</span></td> 
                                 <td>
                                     <div class="button-group"> 
