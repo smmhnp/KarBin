@@ -34,11 +34,17 @@
                     <i class="fas fa-sign-in-alt"></i> ورود
                 </button>
 
+                <a href="{{ route('google_login') }}" class="google-btn w-100 mt-4">
+                    <span>ورود با گوگل</span>
+                    <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google Logo">
+                </a>
+                
                 <!-- Forgot Password -->
                 <div class="text-center mt-4"> 
                     <small><a href="#">بازیابی رمز عبور</a></small> 
                 </div>
             </form>
+            
         </div>
     </div>
 

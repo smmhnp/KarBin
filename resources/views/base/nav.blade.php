@@ -3,17 +3,21 @@
         <i class="fas fa-bars"></i>
     </button>
     <div class="logo">Kar Bin</div>
+    
     <nav class="main-nav">
-        <a href="{{ route('dashboard') }}" class="nav-link"><i class="fas fa-list-ul fa-fw"></i> داشبورد</a>
-        <a href="{{ route('board') }}" class="nav-link"><i class="fas fa-folder fa-fw"></i> تابلوی جریان کار</a>
-        <a href="{{ route('project') }}" class="nav-link"><i class="fas fa-folder fa-fw"></i> پروژه‌ها</a>
-        <a href="{{ route('profile') }}" class="nav-link"><i class="fas fa-user-cog fa-fw"></i> پروفایل</a>
+        @if (Auth::check())
+            <a href="{{ route('dashboard') }}" class="nav-link"><i class="fas fa-list-ul fa-fw"></i> داشبورد</a>
+            <a href="{{ route('board') }}" class="nav-link"><i class="fas fa-folder fa-fw"></i> تابلوی جریان کار</a>
+            <a href="{{ route('project') }}" class="nav-link"><i class="fas fa-folder fa-fw"></i> پروژه‌ها</a>
+            <a href="{{ route('profile') }}" class="nav-link"><i class="fas fa-user-cog fa-fw"></i> پروفایل</a>
 
-        @if (isset(Auth::user()->role) and Auth::user()->role == 'admin')
-            <a href="{{ route('users.all') }}" class="nav-link"><i class="fas fa-users-cog fa-fw"></i> مدیریت کاربران</a>
+            @if (isset(Auth::user()->role) and Auth::user()->role == 'admin')
+                <a href="{{ route('users.all') }}" class="nav-link"><i class="fas fa-users-cog fa-fw"></i> مدیریت کاربران</a>
+            @endif
+
         @endif
-
     </nav>
+    
     <div class="header-actions">
 
         <a href="{{ route('add') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> وظیفه جدید</a>

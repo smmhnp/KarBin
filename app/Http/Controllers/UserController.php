@@ -8,6 +8,9 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Str;
+
 
 
 class UserController extends ApiController
@@ -162,5 +165,33 @@ class UserController extends ApiController
     public function users(){
         $users = User::all();
         return view('users/admin', ['users' => $users]);
+    }
+
+    //................................................login.with.google..................
+
+    public function google_login(){
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function login_with_google(){
+        $googleUser = Socialite::driver('google')->stateless()->user();
+
+        $user = User::firstOrCreate(
+            ['email' => $googleUser->getEmail()],
+            [
+                'firstname' => $googleUser->user['given_name'],
+                'lastname' => $googleUser->user['family_name'],
+                'nickname' => $googleUser->nickname ?? $googleUser->user['given_name'],
+                'role' => 'user',
+                'unit' => 'dev',
+                'email' => $googleUser->getEmail(),
+                'email_hash' => Hash::make($googleUser->getEmail()),
+                'password' => Hash::make(Str::random(8)),
+            ]
+        );
+
+        Auth::login($user);
+
+        return redirect('/dashboard');
     }
 }

@@ -3,7 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
-use Symfony\Component\HttpKernel\Profiler\Profile;
+use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 Route::get('/', [TaskController::class, 'dashboard'])->name('main');
 
@@ -19,6 +23,13 @@ Route::get('/users/profile', [UserController::class, 'profile'])->name('profile'
 Route::post('/users/profile', [UserController::class, 'change'])->name('change');
 
 Route::get('/users/admin', [UserController::class, 'users'])->name('users.all');
+
+//....................................................login.whit.google..................
+
+Route::get('/google-login', [UserController::class, 'google_login'])->name('google_login');
+
+
+Route::get('/login-with-google', [UserController::class, 'login_with_google']);
 
 //..............................................................................................
 

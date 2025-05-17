@@ -456,4 +456,35 @@
         #profile-screen form > div[style*="grid-template-columns"] { gap: 0 15px !important; }
     }
 
+    th, td{
+        text-align: center !important;
+    }
+
+    td > div{
+        display: inline-block !important;
+    }
+
+    .google-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    background-color: #ffffff;
+    border: 1px solid #dfdfdf;
+    border-radius: 4px;
+    color: #333333;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    }
+
+    .google-btn img {
+        width: 30px;
+        margin-right: 10px;
+    }
+
+    .google-btn:hover {
+        background-color: #f1f1f1;
+    }
+    
 </style>
