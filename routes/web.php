@@ -31,10 +31,15 @@ Route::post('users/modify/{id}', [UserController::class, 'modifySubmit'])->name(
 
 Route::get('/google-login', [UserController::class, 'google_login'])->name('google_login');
 
-
 Route::get('/login-with-google', [UserController::class, 'login_with_google']);
 
-//..............................................................................................
+//....................................................login.eith.github..................
+
+Route::get('/github-login', [UserController::class, 'github_login'])->name('github_login');
+
+Route::get('/login-with-github', [UserController::class, 'login_with_github']);
+
+//.......................................................................................
 
 Route::get('/dashboard', [TaskController::class, 'dashboard'])->name('dashboard');
 

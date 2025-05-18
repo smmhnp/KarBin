@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
@@ -212,9 +213,10 @@ class UserController extends ApiController
     public function login_with_google(){
         $googleUser = Socialite::driver('google')->stateless()->user();
 
-        $user = User::firstOrCreate(
-            ['email' => $googleUser->getEmail()],
-            [
+        $current_user = User::where('email_hash', hash('sha256', $googleUser->getEmail()))->first();
+
+        if (!$current_user) {
+            $current_user = User::create([
                 'firstname' => $googleUser->user['given_name'],
                 'lastname' => $googleUser->user['family_name'],
                 'nickname' => $googleUser->nickname ?? $googleUser->user['given_name'],
@@ -222,11 +224,41 @@ class UserController extends ApiController
                 'unit' => 'dev',
                 'email' => $googleUser->getEmail(),
                 'email_hash' => Hash::make($googleUser->getEmail()),
-                'password' => Hash::make(Str::random(8)),
-            ]
-        );
+                'password' => Hash::make(Str::random(16)), 
+            ]);
+        }
+        
+        Auth::login($current_user);
 
-        Auth::login($user);
+        return redirect('/dashboard');
+    }
+
+
+    //................................................login.with.github..................
+
+    public function github_login(){
+        return Socialite::driver('github')->redirect();
+    }
+
+    public function login_with_github(){
+        $githubuser = Socialite::driver('github')->stateless()->user();
+
+        $current_user = User::where('email_hash', hash('sha256', $githubuser->getEmail()))->first();
+
+        if (!$current_user) {
+            $current_user = User::create([
+                'firstname' => $githubuser->user['given_name'],
+                'lastname' => $githubuser->user['family_name'],
+                'nickname' => $githubuser->nickname ?? $githubuser->user['given_name'],
+                'role' => 'user',
+                'unit' => 'dev',
+                'email' => $githubuser->getEmail(),
+                'email_hash' => Hash::make($githubuser->getEmail()),
+                'password' => Hash::make(Str::random(16)), 
+            ]);
+        }
+        
+        Auth::login($current_user);
 
         return redirect('/dashboard');
     }

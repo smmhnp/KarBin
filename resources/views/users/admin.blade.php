@@ -35,7 +35,7 @@
                                 <td>
                                     <span class="badge badge-status-active">فعال</span>
                                 </td> 
-                                <td>{{ $user -> create_at }}</td> 
+                                <td>{{ $user -> created_at -> toDateString() }}</td> 
                                 <td>
                                     <div class="button-group">
                                         <a href="{{ route('modify', ['id' => $user->id]) }}" class="btn btn-sm btn-secondary" title="ویرایش"><i class="fas fa-user-edit"></i></a> 
