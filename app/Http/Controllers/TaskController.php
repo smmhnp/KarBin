@@ -73,6 +73,7 @@ class TaskController extends Controller
         return view('tasks.projects', ['projects' => $projects]);
     }
 
+    
     //................................................show...............................
 
     public function view($id){

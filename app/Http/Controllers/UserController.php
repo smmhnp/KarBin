@@ -103,6 +103,42 @@ class UserController extends ApiController
     }
 
 
+    //................................................modify............................
+
+     public function modify($id){
+
+        $user = User::findOrFail($id);
+
+        return view('users.modify', ['user' => $user]);
+    }
+
+    public function modifySubmit(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $validated = $request->validate([
+            'firstname' => 'required | string | max:255',
+            'lastname' => 'required | string | max:255',
+            'nickname' => 'required | string | max:255 | unique:users,nickname,' . $id,
+            'role' => 'required | string | max:255',
+            'unit' => 'required | string | max:255',
+            'email' => 'required | email | max:255 | unique:users,email,' . $id,
+        ]);
+
+        $user->update([
+            'firstname' => $validated['firstname'],
+            'lastname' => $validated['lastname'],
+            'nickname' => $validated['nickname'],
+            'role' => $validated['role'],
+            'unit' => $validated['unit'],
+            'email' => $validated['email'],
+            'email_hash' => hash('SHA256', $validated['email']),
+        ]);
+
+        return redirect()->route('users.all')->with('success', 'کاربر با موفقیت ویرایش شد');
+    }
+
+
     //................................................logout.............................
 
     public function logout(Request $request)

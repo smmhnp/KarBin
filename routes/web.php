@@ -24,6 +24,9 @@ Route::post('/users/profile', [UserController::class, 'change'])->name('change')
 
 Route::get('/users/admin', [UserController::class, 'users'])->name('users.all');
 
+Route::get('users/modify/{id}', [UserController::class, 'modify'])->name('modify');
+Route::post('users/modify/{id}', [UserController::class, 'modifySubmit'])->name('modifysubmit');
+
 //....................................................login.whit.google..................
 
 Route::get('/google-login', [UserController::class, 'google_login'])->name('google_login');

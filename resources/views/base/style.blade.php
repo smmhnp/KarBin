@@ -83,7 +83,7 @@
     .input-group > .input-group-text:not(:last-child) { border-left: 0; }
 
     /* --- Button Styling --- */
-    .btn { display: inline-flex; align-items: center; justify-content: center; gap: .6rem; font-weight: 500; line-height: 1.5; text-align: center; vertical-align: middle; cursor: pointer; user-select: none; border: 1px solid transparent; padding: .7rem 1.4rem; font-size: 0.9rem; border-radius: var(--border-radius-md); transition: all var(--transition-smooth); }
+    .btn { font-family: var(--font-family); display: inline-flex; align-items: center; justify-content: center; gap: .6rem; font-weight: 500; line-height: 1.5; text-align: center; vertical-align: middle; cursor: pointer; user-select: none; border: 1px solid transparent; padding: .7rem 1.4rem; font-size: 0.9rem; border-radius: var(--border-radius-md); transition: all var(--transition-smooth); }
     .btn i { line-height: 1; font-size: 1.1em; margin-left: 2px; margin-right: -2px; }
     .btn-primary { background-color: var(--primary-color); border-color: var(--primary-color); color: var(--text-on-primary); }
     .btn-primary:hover { background-color: #1e40af; border-color: #1e3a8a; box-shadow: var(--shadow-medium); transform: translateY(-1px); }

@@ -38,7 +38,7 @@
                                 <td>{{ $user -> create_at }}</td> 
                                 <td>
                                     <div class="button-group">
-                                        <button class="btn btn-sm btn-secondary" title="ویرایش"><i class="fas fa-user-edit"></i></button> 
+                                        <a href="{{ route('modify', ['id' => $user->id]) }}" class="btn btn-sm btn-secondary" title="ویرایش"><i class="fas fa-user-edit"></i></a> 
                                         <button class="btn btn-sm btn-danger" title="غیرفعال کردن"><i class="fas fa-user-slash"></i></button>
                                     </div>
                                 </td> 

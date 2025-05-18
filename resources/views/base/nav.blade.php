@@ -27,7 +27,7 @@
                 <div class="user-avatar">{{ isset(Auth::user()->firstname) ? Str::substr(Auth::user()->firstname, 0, 3) : '' }}</div>
                 <div class="user-info">
                     <span class="user-nickname">{{ isset(Auth::user()->firstname) ? Auth::user()->firstname : 'Lead' }}</span>
-                    <span class="user-role">{{ isset(Auth::user()->role) ? Auth::user()->role : '' }}</span>
+                    <span class="user-role">{{ isset(Auth::user()->role) ? Role (Auth::user()->role) : '' }}</span>
                 </div>
             </div>
 

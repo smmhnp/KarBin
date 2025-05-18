@@ -31,7 +31,8 @@
 
                 <!-- Submit -->
                 <button type="submit" class="btn btn-primary w-100 mt-4">
-                    <i class="fas fa-sign-in-alt"></i> ورود
+                    <span>ورود </span>
+                    <i class="fas fa-sign-in-alt"></i>
                 </button>
 
                 <a href="{{ route('google_login') }}" class="google-btn w-100 mt-4">
