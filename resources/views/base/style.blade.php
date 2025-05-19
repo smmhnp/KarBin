@@ -465,17 +465,17 @@
     }
 
     .google-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 20px;
-    background-color: #ffffff;
-    border: 1px solid #dfdfdf;
-    border-radius: 4px;
-    color: #333333;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 20px;
+        background-color: #ffffff;
+        border: 1px solid #dfdfdf;
+        border-radius: 4px;
+        color: #333333;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
     }
 
     .google-btn img {
@@ -487,27 +487,27 @@
         background-color: #f1f1f1;
     }
     
-   div.cf-turnstile{
+    div.cf-turnstile{
         display: flex;
         justify-content: space-around;
     }
 
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 25px 35px;
-  }
-
-  /* ریسپانسیو برای صفحه‌های کوچکتر */
-  @media (max-width: 992px) {
     .grid-container {
-      grid-template-columns: repeat(2, 1fr); /* دو ستون */
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 25px 35px;
     }
-  }
 
-  @media (max-width: 576px) {
-    .grid-container {
-      grid-template-columns: 1fr; /* یک ستون */
+    @media (max-width: 992px) {
+        .grid-container {
+            grid-template-columns: repeat(2, 1fr); 
+        }
     }
-  }
+
+    @media (max-width: 576px) {
+        .grid-container {
+            grid-template-columns: 1fr;
+        }   
+    }
+    
 </style>

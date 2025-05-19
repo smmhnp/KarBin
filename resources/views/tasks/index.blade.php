@@ -96,9 +96,10 @@
                     </div>
                 </div>
                 
-                <div class="ms-auto"> 
-                        <a href="{{ route('add') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> وظیفه جدید</a> 
+                <div> 
+                    <a href="{{ route('add') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> وظیفه جدید</a> 
                 </div>
+                
             </div>
 
             <div class="table-container">
