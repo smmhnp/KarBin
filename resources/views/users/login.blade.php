@@ -29,6 +29,14 @@
                     @enderror
                 </div>
 
+                <!-- cloudflare -->
+                 <div class="mt-4">
+                    <x-turnstile-widget theme="light" language="fa"/>
+                    @error('cf-turnstile-response')
+                        <p class="error">{{ $message }}</p>
+                    @enderror
+                </div>
+                
                 <!-- Submit -->
                 <button type="submit" class="btn btn-primary w-100 mt-4">
                     <span>ورود </span>
@@ -60,14 +68,6 @@
                         </svg>
                     </a>
 
-                </div>
-                
-                <!-- cloudflare -->
-                 <div class="mt-4">
-                    <x-turnstile-widget theme="light" language="fa"/>
-                    @error('cf-turnstile-response')
-                        <p class="error">{{ $message }}</p>
-                    @enderror
                 </div>
                 
                 <!-- Forgot Password -->

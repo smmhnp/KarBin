@@ -36,7 +36,7 @@ class UserController extends ApiController
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required|min:6',
-            'cf-turnstile-response' => [new TurnstileCheck()],
+            'cf-turnstile-response' => new TurnstileCheck(),                            // work on every domain but dont work on localhost
         ]);
 
         if ($validator->fails()) {

@@ -3,7 +3,7 @@
 
     <div class="card login-card">
         <div class="card-header">
-            <h3 class="card-title"><i class="fas fa-user-plus"></i> ثبت‌نام کاربر جدید</h3>
+            <h3 class="card-title"><i class="fas fa-user-plus"></i> ویرایش کاربر</h3>
         </div>
 
         <form action="{{ route('modify', ['id' => $user->id]) }}" method="POST" enctype="multipart/form-data">
