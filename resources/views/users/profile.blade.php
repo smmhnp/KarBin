@@ -38,29 +38,26 @@
                 @csrf
                 <h4 class="mb-4">تغییر رمز عبور</h4>
 
+                 @if ($errors->any())
+                    <div class="alert alert-danger" role="alert">
+                        {{ $errors->first() }}
+                    </div>
+                @endif
+
                 <div class="row g-3 mb-4">
                     <div class="col-md-4">
                         <label for="currentPassword" class="form-label">رمز عبور فعلی</label>
                         <input name="current_password" type="password" class="form-control @error('current_password') is-invalid @enderror" id="currentPassword">
-                        @error('current_password')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
                     </div>
 
                     <div class="col-md-4">
                         <label for="newPassword" class="form-label">رمز عبور جدید</label>
                         <input name="new_password" type="password" class="form-control @error('new_password') is-invalid @enderror" id="newPassword">
-                        @error('new_password')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
                     </div>
 
                     <div class="col-md-4">
                         <label for="confirmNewPassword" class="form-label">تکرار رمز جدید</label>
                         <input name="confirm_new_password" type="password" class="form-control @error('confirm_new_password') is-invalid @enderror" id="confirmNewPassword">
-                        @error('confirm_new_password')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
                     </div>
                 </div>
 

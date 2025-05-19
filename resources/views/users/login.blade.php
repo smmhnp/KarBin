@@ -8,6 +8,14 @@
                 <h3 class="card-title"><i class="fas fa-lock"></i> ورود به حساب کاربری</h3>
             </div>
 
+            @if ($errors->any())
+                <div class="alert alert-danger" role="alert">
+                    {{ $errors->first() }}
+                </div>
+            @endif
+
+
+
             <form action="{{ route('login.submit') }}" method="POST" novalidate>
                 @csrf
 
@@ -15,26 +23,17 @@
                 <div class="form-group">
                     <label for="loginEmail" class="form-label">آدرس ایمیل سازمانی</label>
                     <input name="email" type="email"  class="form-control @error('email') is-invalid @enderror"  id="loginEmail" placeholder="email@company.com" value="{{ old('email') }}">
-                    @error('email')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
                 </div>
 
                 <!-- Password -->
                 <div class="form-group">
                     <label for="loginPassword" class="form-label">رمز عبور</label>
                     <input name="password" type="password" class="form-control @error('password') is-invalid @enderror" id="loginPassword" placeholder="••••••••">
-                    @error('password')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
                 </div>
 
                 <!-- cloudflare -->
                  <div class="mt-4">
                     <x-turnstile-widget theme="light" language="fa"/>
-                    @error('cf-turnstile-response')
-                        <p class="error">{{ $message }}</p>
-                    @enderror
                 </div>
                 
                 <!-- Submit -->

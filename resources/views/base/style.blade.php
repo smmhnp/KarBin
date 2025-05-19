@@ -491,4 +491,23 @@
         display: flex;
         justify-content: space-around;
     }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px 35px;
+  }
+
+  /* ریسپانسیو برای صفحه‌های کوچکتر */
+  @media (max-width: 992px) {
+    .grid-container {
+      grid-template-columns: repeat(2, 1fr); /* دو ستون */
+    }
+  }
+
+  @media (max-width: 576px) {
+    .grid-container {
+      grid-template-columns: 1fr; /* یک ستون */
+    }
+  }
 </style>

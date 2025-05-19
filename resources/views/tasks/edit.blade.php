@@ -4,14 +4,10 @@
     <div class="container">
         <h2><i class="fas fa-edit"></i>ایجاد / ویرایش وظیفه</h2>
 
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul class="mb-0">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
+         @if ($errors->any())
+                <div class="alert alert-danger" role="alert">
+                    {{ $errors->first() }}
+                </div>
         @endif
 
         <div class="card">
@@ -21,27 +17,19 @@
                 <div class="form-group">
                     <label for="taskTitle" class="form-label">عنوان</label>
                     <input name="title" type="text" class="form-control @error('title') is-invalid @enderror" value="{{ old('title', $data['task']->title) }}" id="taskTitle">
-                    @error('title')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
                 </div>
 
                 <div class="form-group">
                     <label for="taskDescription" class="form-label">شرح کامل</label>
                     <textarea name="content" class="form-control @error('content') is-invalid @enderror" id="taskDescription" rows="5">{{ old('content', $data['task']->content) }}</textarea>
-                    @error('content')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
                 </div>
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 25px 35px;">
+                <div class="grid-container">
 
                     <div class="form-group">
                         <label for="project_name" class="form-label">پروژه مرتبط</label>
-                        <input name="project_name" type="text" class="form-control @error('project_name') is-invalid @enderror" value="{{ old('project_name', $data['task']->project_name) }}" id="project_name">
-                        @error('project_name')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <input name="project_name" type="text" class="form-control @error('project_name') is-invalid @enderror" 
+                            value="{{ old('project_name', $data['task']->project_name) }}" id="project_name">
                     </div>
 
                     <div class="form-group">
@@ -52,9 +40,6 @@
                             <option>بالا</option>
                             <option>پایین</option>
                         </select>
-                        @error('preference')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
                     </div>
 
                     <div class="form-group">
@@ -66,17 +51,12 @@
                             <option>بازبینی</option>
                             <option>انجام شده</option>
                         </select>
-                        @error('status')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
                     </div>
 
                     <div class="form-group">
                         <label for="taskDueDate" class="form-label">مهلت انجام</label>
-                        <input name="deadline" type="date" class="form-control @error('deadline') is-invalid @enderror" id="taskDueDate" value="{{ old('deadline', $data['task']->deadline) }}">
-                        @error('deadline')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <input name="deadline" type="date" class="form-control @error('deadline') is-invalid @enderror" 
+                            id="taskDueDate" value="{{ old('deadline', $data['task']->deadline) }}">
                     </div>
 
                     <div class="form-group">
@@ -90,18 +70,13 @@
                                 <option>{{ $user->nickname }}</option>
                             @endforeach
                         </select>
-                        @error('undertaking')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
                     </div>
-                </div>
 
-                <div class="form-group mt-3">
-                    <label for="attachment" class="form-label">پیوست فایل</label>
-                    <input type="file" name="attachment" class="form-control @error('attachment') is-invalid @enderror" id="attachment">
-                    @error('attachment')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                    <div class="form-group">
+                        <label for="attachment" class="form-label">پیوست فایل</label>
+                        <input type="file" name="attachment" class="form-control @error('attachment') is-invalid @enderror" id="attachment">
+                    </div>
+
                 </div>
 
                 <div class="mt-5 d-flex gap-3">

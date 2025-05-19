@@ -124,9 +124,17 @@ class TaskController extends Controller
                 'status' => 'required|string|max:255',
                 'attachment' => 'nullable|file|max:5120',
             ], [
-                'required' => 'فیلد :attribute الزامی است',
-                'max' => 'فیلد :attribute نباید بیشتر از :max کاراکتر باشد',
-                'date' => 'فیلد :attribute باید یک تاریخ معتبر باشد',
+                'title.required' => 'لطفاً عنوان تسک را وارد کنید.',
+                'title.max' => 'عنوان تسک نباید بیشتر از ۲۵۵ کاراکتر باشد.',
+                'project_name.required' => 'لطفاً نام پروژه را وارد کنید.',
+                'content.required' => 'لطفاً توضیحات تسک را وارد کنید.',
+                'undertaking.required' => 'لطفاً مسئولیت را وارد کنید.',
+                'preference.required' => 'لطفاً ترجیحات را وارد کنید.',
+                'deadline.required' => 'لطفاً تاریخ انقضا را وارد کنید.',
+                'deadline.date' => 'لطفاً تاریخ را به صورت صحیح وارد کنید.',
+                'status.required' => 'لطفاً وضعیت تسک را وارد کنید.',
+                'attachment.file' => 'فایل آپلودی باید یک فایل معتبر باشد.',
+                'attachment.max' => 'حجم فایل نباید بیشتر از ۵ مگابایت باشد.',
             ]);
 
             if ($validator->fails()) {
