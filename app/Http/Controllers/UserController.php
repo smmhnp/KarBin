@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Str;
+use Coderflex\LaravelTurnstile\Rules\TurnstileCheck;
+use Coderflex\LaravelTurnstile\Facades\LaravelTurnstile;
 
 
 
@@ -31,21 +33,25 @@ class UserController extends ApiController
             return redirect()->route('dashboard');
         }
 
-        $credentials = $request->only('email', 'password');
-
-        $validator = Validator::make($credentials, [
-            'email' => 'required | email',
-            'password' => 'required | min:6',
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|min:6',
+            'cf-turnstile-response' => [new TurnstileCheck()],
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $emailHash = hash('sha256', $credentials['email']);
+        $response = LaravelTurnstile::validate();
+        if (! $response['success']) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $emailHash = hash('sha256', $request->email);
         $user = User::where('email_hash', $emailHash)->first();
 
-        if (!$user || !Hash::check($credentials['password'], $user->password)) {
+        if (!$user || !Hash::check($request->password, $user->password)) {
             return back()->withErrors(['message' => 'ایمیل یا رمز عبور اشتباه است'])->withInput();
         }
 
@@ -254,7 +260,7 @@ class UserController extends ApiController
                 'unit' => 'dev',
                 'email' => $githubuser->getEmail(),
                 'email_hash' => Hash::make($githubuser->getEmail()),
-                'password' => Hash::make(Str::random(16)), 
+                'password' => Hash::make(Str::random(8)), 
             ]);
         }
         

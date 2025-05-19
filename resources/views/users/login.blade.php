@@ -61,12 +61,20 @@
                     </a>
 
                 </div>
-
+                
+                <!-- cloudflare -->
+                 <div class="mt-4">
+                    <x-turnstile-widget theme="light" language="fa"/>
+                    @error('cf-turnstile-response')
+                        <p class="error">{{ $message }}</p>
+                    @enderror
+                </div>
                 
                 <!-- Forgot Password -->
                 <div class="text-center mt-4"> 
                     <small><a href="#">بازیابی رمز عبور</a></small> 
                 </div>
+                
             </form>
             
         </div>
