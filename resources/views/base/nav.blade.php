@@ -2,7 +2,9 @@
     <button class="mobile-menu-toggle" id="toggleMobileMenu">
         <i class="fas fa-bars"></i>
     </button>
-    <div class="logo">Kar Bin</div>
+    <div class="logo">
+        <img src="{{ asset('images/logo.png') }}" alt="Kar Bin Logo">
+    </div>
     
     <nav class="main-nav">
         @if (Auth::check())
@@ -54,9 +56,9 @@
     @endif
 
     @if (Auth::check())
-        <a href="{{ route('logout') }}" class="icon-link" title="logout"><i class="fas fa-sign-out-alt"></i></a>
+        <a href="{{ route('logout') }}" class="icon-link" title="logout"><i class="fas fa-sign-out-alt"></i> خروج</a>
     @else
-        <a href="{{ route('login') }}" class="icon-link" title="login"><i class="fas fa-sign-out-alt"></i></a>
+        <a href="{{ route('login') }}" class="icon-link" title="login"><i class="fas fa-sign-out-alt"></i> ورود</a>
     @endif
 
 </div>

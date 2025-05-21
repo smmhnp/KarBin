@@ -510,4 +510,9 @@
         }   
     }
     
+    .logo img {
+        height: 60px;
+        vertical-align: middle;
+    }
+
 </style>

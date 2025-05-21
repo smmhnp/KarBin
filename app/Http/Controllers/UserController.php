@@ -36,21 +36,18 @@ class UserController extends ApiController
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required|min:6',
-            // 'cf-turnstile-response' => new TurnstileCheck(),                            // work on every domain but dont work on localhost
+            'cf-turnstile-response' => 'required',
         ], [
             'email.required' => 'وارد کردن ایمیل الزامی است.',
             'email.email' => 'فرمت ایمیل وارد شده معتبر نیست.',
             'password.required' => 'رمز عبور الزامی است.',
             'password.min' => 'رمز عبور باید حداقل :min کاراکتر باشد.',
-        ]);
+            'cf-turnstile-response.required' => 'لطفاً کپچا را تکمیل کنید.',
+]);
+
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
-        }
-
-        $response = LaravelTurnstile::validate();
-        if (! $response['success']) {
-            return back()->withErrors($validator)->withInput();
         }
 
         $emailHash = hash('sha256', $request->email);
