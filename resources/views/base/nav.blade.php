@@ -34,7 +34,7 @@
             </div>
 
             <form method="POST" action="{{ route('logout') }}">
-            @csrf
+                @csrf
                 <button type="submit" class="nav-link btn btn-link"><i class="fas fa-sign-out-alt"></i></button>
             </form>
         @else
