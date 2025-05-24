@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Task;
 use App\Models\User;
+use App\Models\Comment;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -79,11 +80,13 @@ class TaskController extends Controller
     public function view($id){
 
         $task = Task::find($id);
-        $user = User::find($task -> user_id);
+        $user = User::all();
+        $comment = Comment::with('user')->where('task_id', $task->id)->get();
 
         $data = [
            'task' => $task,
-           'user' => $user 
+           'user' => $user,
+           'comment' => $comment
         ];
 
         return view('tasks.show', ['data' => $data]);

@@ -19,6 +19,11 @@ class Task extends Model
 
     protected $guarded = ['id'];
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     protected function casts(): array
     {
         return [
