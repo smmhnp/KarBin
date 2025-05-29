@@ -61,3 +61,5 @@ Route::get('/project-list', [TaskController::class, 'list'])->name('project');
 Route::get('/download/{id}', [TaskController::class, 'webDownload'])->name('file.download');
 
 Route::post('/task/{task}/comment', [CommentController::class, 'store'])->name('comment');
+
+Route::post('task/done/{id}', [TaskController::class, 'done'])->name('done');

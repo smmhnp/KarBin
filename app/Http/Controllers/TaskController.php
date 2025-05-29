@@ -273,4 +273,19 @@ class TaskController extends Controller
         return Storage::download($filePath);
     }
 
+    //................................................done...............................
+
+    public function done(Request $request, $id){
+        $task = Task::findOrFail($id);
+
+        $validate = $request -> validate([
+            'status' => 'required|string|max:255',
+        ]);
+
+        $task->update([
+            'status' => $request->input('status'),
+        ]);
+        
+        return redirect()->route('dashboard')->with('success', 'تسک به عنوان انجام شده ذخیره شد');
+    }
 }

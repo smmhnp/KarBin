@@ -80,7 +80,7 @@
             @if (Auth::user() -> role == 'admin')
                 <a href="{{ route('edit', ['id' => $data['task'] ->id]) }}" class="btn btn-secondary"><i class="fas fa-edit"></i>ویرایش</a>
 
-                <form action="{{ route('tasks.destroy', ['id' => $data['task'] ->id]) }}" method="POST" onsubmit="return confirm('آیا از حذف این تسک مطمئنی؟')">
+                <form action="{{ route('tasks.destroy', ['id' => $data['task'] -> id]) }}" method="POST" onsubmit="return confirm('آیا از حذف این تسک مطمئنی؟')">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger" title="حذف">
@@ -93,7 +93,11 @@
                 <a href="{{ route('edit', ['id' => $data['task'] ->id]) }}" class="btn btn-secondary"><i class="fas fa-edit"></i>ویرایش</a>
             @endif
 
-            <button class="btn btn-success"><i class="fas fa-check-circle"></i>علامت زدن به عنوان انجام شده</button>
+            <form action="{{ route('done', ['id' => $data['task'] -> id]) }}" method="post">
+                @csrf
+                <input type="hidden" name="status" value="انجام شده">
+                <button class="btn btn-success"><i class="fas fa-check-circle"></i>علامت زدن به عنوان انجام شده</button>
+            </form>
             <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ route('dashboard') }}'"><i class="fas fa-times"></i> لغو</button>
         </div>
     </div>
