@@ -79,24 +79,26 @@
                 $done = 0;
             @endphp
 
-            @foreach ($tasks as $task)
-                @php
-                    $status = $task->status;
-                    switch ($status) {
-                        case 'برای انجام':
-                            $todo++;
-                            break;
-                        case 'در حال انجام':
-                            $progress++;
-                            break;
-                        case 'بازبینی':
-                            $review++;
-                            break;
-                        case 'انجام شده':
-                            $done++;
-                            break;
-                    }
-                @endphp
+             @foreach ($tasks as $item)
+                @foreach ($item -> tasks as $task)
+                    @php
+                        $status = $task->status;
+                        switch ($status) {
+                            case 'برای انجام':
+                                $todo++;
+                                break;
+                            case 'در حال انجام':
+                                $progress++;
+                                break;
+                            case 'بازبینی':
+                                $review++;
+                                break;
+                            case 'انجام شده':
+                                $done++;
+                                break;
+                        }
+                    @endphp
+                @endforeach
             @endforeach
 
 
@@ -107,22 +109,24 @@
                         <h3 class="stage-title"><i class="fas fa-inbox"></i> برای انجام <span class="task-count">({{ $todo }})</span></h3>
                         
                         <div class="stage-tasks" id="todo-tasks">
-                            @foreach ($tasks as $task)
-                                @if ($task -> status == 'برای انجام')
-                                    <div class="task-card-horizontal" data-priority="high" data-project="alpha" data-assignee="DevLead">
-                                        <a href="{{ route('task.view', ['id' => $task->id]) }}" class="task-card-title">{{ $task -> project_name }}</a>
-                                        <div class="task-card-meta">
-                                            <span class="badge badge-priority-{{ color_preference_style ($task -> preference) }}">{{ $task -> preference }}</span>
-                                            <div class="task-card-assignee">
-                                                <div class="task-card-avatar" style="background-color: var(--danger-color);">
-                                                {{ $task -> undertaking }}
+                            @foreach ($tasks as $item)
+                               @foreach ($item -> tasks as $task)
+                                    @if ($task -> status == 'برای انجام')
+                                        <div class="task-card-horizontal" data-priority="high" data-project="alpha" data-assignee="DevLead">
+                                            <a href="{{ route('task.view', ['id' => $task->id]) }}" class="task-card-title">{{ $task -> project_name }}</a>
+                                            <div class="task-card-meta">
+                                                <span class="badge badge-priority-{{ color_preference_style ($task -> preference) }}">{{ $task -> preference }}</span>
+                                                <div class="task-card-assignee">
+                                                    <div class="task-card-avatar" style="background-color: var(--danger-color);">
+                                                    {{ $task -> undertaking }}
+                                                    </div>
+                                                    <span>{{ $task -> undertaking }}</span>
                                                 </div>
-                                                <span>{{ $task -> undertaking }}</span>
+                                                <div class="task-card-due-date"><i class="far fa-calendar-alt"></i><span>{{ $task->deadline->toDateString() }}</span></div>
                                             </div>
-                                            <div class="task-card-due-date"><i class="far fa-calendar-alt"></i><span>{{ $task->deadline->toDateString() }}</span></div>
                                         </div>
-                                    </div>
-                                @endif
+                                    @endif
+                                @endforeach
                             @endforeach
                         </div> 
                     </div>
@@ -134,22 +138,24 @@
                         <h3 class="stage-title"><i class="fas fa-inbox"></i> در حال انجام <span class="task-count">({{ $progress }})</span></h3>
                         
                         <div class="stage-tasks" id="todo-tasks">
-                            @foreach ($tasks as $task)
-                                @if ($task -> status == 'در حال انجام')
-                                    <div class="task-card-horizontal" data-priority="high" data-project="alpha" data-assignee="DevLead">
-                                        <a href="{{ route('task.view', ['id' => $task->id]) }}" class="task-card-title">{{ $task -> project_name }}</a>
-                                        <div class="task-card-meta">
-                                            <span class="badge badge-priority-{{ color_preference_style ($task -> preference) }}">{{ $task -> preference }}</span>
-                                            <div class="task-card-assignee">
-                                                <div class="task-card-avatar" style="background-color: var(--danger-color);">
-                                                {{ $task -> undertaking }}
+                             @foreach ($tasks as $item)
+                               @foreach ($item -> tasks as $task)
+                                    @if ($task -> status == 'در حال انجام')
+                                        <div class="task-card-horizontal" data-priority="high" data-project="alpha" data-assignee="DevLead">
+                                            <a href="{{ route('task.view', ['id' => $task->id]) }}" class="task-card-title">{{ $task -> project_name }}</a>
+                                            <div class="task-card-meta">
+                                                <span class="badge badge-priority-{{ color_preference_style ($task -> preference) }}">{{ $task -> preference }}</span>
+                                                <div class="task-card-assignee">
+                                                    <div class="task-card-avatar" style="background-color: var(--danger-color);">
+                                                    {{ $task -> undertaking }}
+                                                    </div>
+                                                    <span>{{ $task -> undertaking }}</span>
                                                 </div>
-                                                <span>{{ $task -> undertaking }}</span>
+                                                <div class="task-card-due-date"><i class="far fa-calendar-alt"></i><span>{{ $task->deadline->toDateString() }}</span></div>
                                             </div>
-                                            <div class="task-card-due-date"><i class="far fa-calendar-alt"></i><span>{{ $task->deadline->toDateString() }}</span></div>
                                         </div>
-                                    </div>
-                                @endif
+                                    @endif
+                                @endforeach
                             @endforeach
                         </div> 
                     </div>
@@ -161,22 +167,24 @@
                         <h3 class="stage-title"><i class="fas fa-inbox"></i> بازبینی <span class="task-count">({{ $review }})</span></h3>
                         
                         <div class="stage-tasks" id="todo-tasks">
-                            @foreach ($tasks as $task)
-                                @if ($task -> status == 'بازبینی')
-                                    <div class="task-card-horizontal" data-priority="high" data-project="alpha" data-assignee="DevLead">
-                                        <a href="{{ route('task.view', ['id' => $task->id]) }}" class="task-card-title">{{ $task -> project_name }}</a>
-                                        <div class="task-card-meta">
-                                            <span class="badge badge-priority-{{ color_preference_style ($task -> preference) }}">{{ $task -> preference }}</span>
-                                            <div class="task-card-assignee">
-                                                <div class="task-card-avatar" style="background-color: var(--danger-color);">
-                                                {{ $task -> undertaking }}
+                             @foreach ($tasks as $item)
+                               @foreach ($item -> tasks as $task)
+                                    @if ($task -> status == 'بازبینی')
+                                        <div class="task-card-horizontal" data-priority="high" data-project="alpha" data-assignee="DevLead">
+                                            <a href="{{ route('task.view', ['id' => $task->id]) }}" class="task-card-title">{{ $task -> project_name }}</a>
+                                            <div class="task-card-meta">
+                                                <span class="badge badge-priority-{{ color_preference_style ($task -> preference) }}">{{ $task -> preference }}</span>
+                                                <div class="task-card-assignee">
+                                                    <div class="task-card-avatar" style="background-color: var(--danger-color);">
+                                                    {{ $task -> undertaking }}
+                                                    </div>
+                                                    <span>{{ $task -> undertaking }}</span>
                                                 </div>
-                                                <span>{{ $task -> undertaking }}</span>
+                                                <div class="task-card-due-date"><i class="far fa-calendar-alt"></i><span>{{ $task->deadline->toDateString() }}</span></div>
                                             </div>
-                                            <div class="task-card-due-date"><i class="far fa-calendar-alt"></i><span>{{ $task->deadline->toDateString() }}</span></div>
                                         </div>
-                                    </div>
-                                @endif
+                                    @endif
+                                @endforeach
                             @endforeach
                         </div> 
                     </div>
@@ -188,22 +196,24 @@
                         <h3 class="stage-title"><i class="fas fa-inbox"></i> انجام شده <span class="task-count">({{ $done }})</span></h3>
                         
                         <div class="stage-tasks" id="todo-tasks">
-                            @foreach ($tasks as $task)
-                                @if ($task -> status == 'انجام شده')
-                                    <div class="task-card-horizontal" data-priority="high" data-project="alpha" data-assignee="DevLead">
-                                        <a href="{{ route('task.view', ['id' => $task->id]) }}" class="task-card-title">{{ $task -> project_name }}</a>
-                                        <div class="task-card-meta">
-                                            <span class="badge badge-priority-{{ color_preference_style ($task -> preference) }}">{{ $task -> preference }}</span>
-                                            <div class="task-card-assignee">
-                                                <div class="task-card-avatar" style="background-color: var(--danger-color);">
-                                                {{ $task -> undertaking }}
+                             @foreach ($tasks as $item)
+                               @foreach ($item -> tasks as $task)
+                                    @if ($task -> status == 'انجام شده')
+                                        <div class="task-card-horizontal" data-priority="high" data-project="alpha" data-assignee="DevLead">
+                                            <a href="{{ route('task.view', ['id' => $task->id]) }}" class="task-card-title">{{ $task -> project_name }}</a>
+                                            <div class="task-card-meta">
+                                                <span class="badge badge-priority-{{ color_preference_style ($task -> preference) }}">{{ $task -> preference }}</span>
+                                                <div class="task-card-assignee">
+                                                    <div class="task-card-avatar" style="background-color: var(--danger-color);">
+                                                    {{ $task -> undertaking }}
+                                                    </div>
+                                                    <span>{{ $task -> undertaking }}</span>
                                                 </div>
-                                                <span>{{ $task -> undertaking }}</span>
+                                                <div class="task-card-due-date"><i class="far fa-calendar-alt"></i><span>{{ $task->deadline->toDateString() }}</span></div>
                                             </div>
-                                            <div class="task-card-due-date"><i class="far fa-calendar-alt"></i><span>{{ $task->deadline->toDateString() }}</span></div>
                                         </div>
-                                    </div>
-                                @endif
+                                    @endif
+                                @endforeach
                             @endforeach
                         </div> 
                     </div>

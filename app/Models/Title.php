@@ -5,19 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Comment extends Model
+class Title extends Model
 {
     use HasFactory;
 
+    protected $table = 'titles';  
+    
     protected $fillable = [
-        'body',
-        'user_id',
-        'task_id',
+        'title'
     ];
-
-    public function task()
+    
+    public function tasks()
     {
-        return $this->belongsTo(Task::class);
+        return $this->hasMany(Task::class);
     }
 
     public function user()
@@ -25,10 +25,12 @@ class Comment extends Model
         return $this->belongsTo(User::class);
     }
 
-        protected function casts(): array
+    protected $guarded = ['id'];
+
+    protected function casts(): array
     {
         return [
-            'body' => 'encrypted',
+            'title' => 'encrypted',
         ];
     }
 }

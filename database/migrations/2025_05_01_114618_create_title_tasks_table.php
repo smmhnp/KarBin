@@ -11,20 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tasks', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('title_id')->constrained('titles')->onDelete('cascade');
+        Schema::create('titles', function (Blueprint $table) {
+            $table->id(); // bigint unsigned
+            $table->string('title')->unique();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('project_name');
-            $table->text('content');
-            $table->string('undertaking');
-            $table->string('preference');
             $table->date('deadline');
-            $table->string('status');
-            $table->string('attachment_path')->nullable();
             $table->timestamps();
         });
-
     }
 
     /**
@@ -32,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tasks');
+        Schema::dropIfExists('titles');
     }
 };

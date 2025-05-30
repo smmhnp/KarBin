@@ -2,6 +2,9 @@
 
 function Role ($role){
     switch ($role):
+        case 'super_admin':
+            $rol = 'مدیر ارشد';
+            break;
         case 'admin':
             $rol = 'مدیر پروژه';
             break;

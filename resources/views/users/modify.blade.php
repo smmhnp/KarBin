@@ -32,7 +32,12 @@
 
             <div class="form-group">
                 <label for="role">نقش کاربر</label>
-                <input type="text" name="role" id="role" class="form-control" value="{{ old('role', $user -> role) }}" required>
+                <select name="role" class="form-control" id="role" required>
+                    <option value="super_admin" {{ old('role', $user -> role) == 'super_admin' ? 'selected' : '' }}>super_admin</option>
+                    <option value="admin" {{ old('role', $user -> role) == 'admin' ? 'selected' : '' }}>admin</option>
+                    <option value="developer" {{ old('role', $user -> role) == 'developer' ? 'selected' : '' }}>developer</option>
+                    <option value="user" {{ old('role', $user -> role) == 'user' ? 'selected' : '' }}>user</option>
+                </select>
             </div>
 
             <div class="form-group">

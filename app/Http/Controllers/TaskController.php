@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\Comment;
+use App\Models\Title;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -37,11 +38,16 @@ class TaskController extends Controller
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
         }
-        
-        $tasks = Task::all();
-        $user = Auth::user();
 
-        return view('tasks.index', ['data' => $tasks, 'user' => $user]);
+        // $tasks = Task::all();
+        // $title = Title::all();
+
+        // return view('tasks.index', ['tasks' => $tasks, 'titles' => $title]);
+
+        $tasks = Title::with('tasks')->get();
+
+        return view('tasks.index', ['tasks' => $tasks]);
+
     }
 
 
@@ -54,7 +60,7 @@ class TaskController extends Controller
             return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
         }
         
-        $tasks = Task::all();
+        $tasks = Title::with('tasks')->get();
 
         return view('tasks.board', ['tasks' => $tasks]);
     }
@@ -69,7 +75,12 @@ class TaskController extends Controller
             return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
         }
         
-        $projects = Task::all();
+        $projects = Title::withCount([
+            'tasks',
+            'tasks as not_done_tasks_count' => function ($query) {
+                $query->where('status', '!=', 'انجام شده');
+            }
+        ])->with('user')->get();
 
         return view('tasks.projects', ['projects' => $projects]);
     }
@@ -80,12 +91,10 @@ class TaskController extends Controller
     public function view($id){
 
         $task = Task::find($id);
-        $user = User::all();
         $comment = Comment::with('user')->where('task_id', $task->id)->get();
 
         $data = [
            'task' => $task,
-           'user' => $user,
            'comment' => $comment
         ];
 
@@ -198,7 +207,6 @@ class TaskController extends Controller
         ], [
             'title.required' => 'لطفاً عنوان تسک را وارد کنید.',
             'title.max' => 'عنوان تسک نباید بیشتر از ۲۵۵ کاراکتر باشد.',
-            'project_name.required' => 'لطفاً نام پروژه را وارد کنید.',
             'content.required' => 'لطفاً توضیحات تسک را وارد کنید.',
             'undertaking.required' => 'لطفاً مسئولیت را وارد کنید.',
             'preference.required' => 'لطفاً ترجیحات را وارد کنید.',
@@ -277,10 +285,6 @@ class TaskController extends Controller
 
     public function done(Request $request, $id){
         $task = Task::findOrFail($id);
-
-        $validate = $request -> validate([
-            'status' => 'required|string|max:255',
-        ]);
 
         $task->update([
             'status' => $request->input('status'),

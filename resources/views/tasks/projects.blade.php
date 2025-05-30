@@ -6,7 +6,7 @@
         <div class="card">
             <div class="section-header">
                 <h3 style="margin-bottom: 0;">لیست پروژه‌ها</h3>
-               @if (Auth::user()->role == 'admin' or Auth::user()->role == 'devloper')
+               @if (Auth::user()->role == 'super_admin')
                     <a href="<?php //echo URLROOT; ?>tasks/add" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i>پروژه جدید</a>
                 @endif
             </div>
@@ -18,24 +18,24 @@
                             <th>تعداد وظایف (فعال / کل)</th> 
                             <th>مدیر پروژه (نام مستعار)</th> 
                             <th>تاریخ ایجاد</th> 
+                            <th>مهلت انجام</th> 
                             <th>عملیات</th> 
                         </tr> 
                     </thead>
                     <tbody>
-                       @foreach ($projects as $project)
+                        @foreach ($projects as $item)
                             <tr> 
+                                <td>{{ $item -> title }}</td> 
+                                <td>{{ $item -> not_done_tasks_count }} / {{ $item -> tasks->count() }}</td> 
+                                <td>{{ $item -> user -> nickname }}</td> 
+                                <td>{{ jDate($item -> created_at) -> ago() }}</td> 
+                                <td>{{ jDate($item -> deadline) -> ago() }}</td> 
                                 <td>
-                                    <strong>{{ $project -> title }}</strong>
-                                </td> 
-                                <td>3 / 4</td> 
-                                <td>{{ $project -> undertaking }}</td> 
-                                <td>{{ $project -> deadline -> toDateString() }}</td> 
-                                <td>
-                                    <div class="button-group">
-                                        <a href="{{ route('task.view', ['id' => $project->id]) }}" class="btn btn-sm btn-secondary" title="نمایش"><i class="fas fa-eye"></i></a> 
-                                    </div>
-                                </td> 
-                            </tr>
+                                    <a href=" " class="btn btn-sm btn-secondary" title="نمایش">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr> 
                         @endforeach
                     </tbody>
                 </table>
@@ -43,4 +43,4 @@
         </div>
     </div>
 
-@endsection
+@endsection 

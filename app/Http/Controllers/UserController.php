@@ -43,7 +43,7 @@ class UserController extends ApiController
             'password.required' => 'رمز عبور الزامی است.',
             'password.min' => 'رمز عبور باید حداقل :min کاراکتر باشد.',
             'cf-turnstile-response.required' => 'لطفاً کپچا را تکمیل کنید.',
-]);
+        ]);
 
 
         if ($validator->fails()) {
@@ -70,7 +70,7 @@ class UserController extends ApiController
             return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
         }
 
-        if (Auth::user()->role != 'admin'){
+        if (Auth::user()->role != 'super_admin'){
             return redirect()->route('dashboard');
         }
 
@@ -83,7 +83,7 @@ class UserController extends ApiController
             return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
         }
 
-        if (Auth::user()->role != 'admin'){
+        if (Auth::user()->role != 'super_admin'){
             return redirect()->route('dashboard');
         }
 
@@ -128,7 +128,7 @@ class UserController extends ApiController
         ]);
 
 
-        $user = User::create([
+        User::create([
             'firstname' => $validated['firstname'],
             'lastname' => $validated['lastname'],
             'nickname' => $validated['nickname'],
@@ -146,6 +146,9 @@ class UserController extends ApiController
     //................................................modify............................
 
      public function modify($id){
+        if (Auth::user()->role != 'super_admin'){
+            return redirect()->route('dashboard');
+        }
 
         $user = User::findOrFail($id);
 
@@ -154,6 +157,10 @@ class UserController extends ApiController
 
     public function modifySubmit(Request $request, $id)
     {
+        if (Auth::user()->role != 'super_admin'){
+            return redirect()->route('dashboard');
+        }
+
         $user = User::findOrFail($id);
 
         $validated = $request->validate([
@@ -276,6 +283,10 @@ class UserController extends ApiController
     //................................................admin..............................
 
     public function users(){
+        if (Auth::user()->role != 'super_admin'){
+            return redirect()->route('dashboard');
+        }
+
         $users = User::all();
         return view('users/admin', ['users' => $users]);
     }

@@ -13,7 +13,7 @@
             <a href="{{ route('project') }}" class="nav-link"><i class="fas fa-folder fa-fw"></i> پروژه‌ها</a>
             <a href="{{ route('profile') }}" class="nav-link"><i class="fas fa-user-cog fa-fw"></i> پروفایل</a>
 
-            @if (isset(Auth::user()->role) and Auth::user()->role == 'admin')
+            @if (isset(Auth::user()->role) and Auth::user()->role == 'super_admin')
                 <a href="{{ route('users.all') }}" class="nav-link"><i class="fas fa-users-cog fa-fw"></i> مدیریت کاربران</a>
             @endif
 
@@ -51,7 +51,7 @@
     <a href="{{ route('add') }}" class="mobile-nav-link"><i class="fas fa-plus-circle fa-fw"></i> وظیفه جدید</a>
     <a href="{{ route('profile') }}" class="mobile-nav-link"><i class="fas fa-user-cog fa-fw"></i> پروفایل</a>
 
-    @if (isset(Auth::user()->role) and Auth::user()->role == 'admin')
+    @if (isset(Auth::user()->role) and Auth::user()->role == 'super_admin')
         <a href="{{ route('users.all') }}" class="nav-link"><i class="fas fa-users-cog fa-fw"></i> مدیریت کاربران</a>
     @endif
 

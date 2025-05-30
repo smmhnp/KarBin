@@ -44,8 +44,6 @@ class User extends Authenticatable implements JWTSubject
             'firstname' => 'encrypted',
             'lastname' => 'encrypted',
             'nickname' => 'encrypted',
-            'role' => 'encrypted',
-            'unit' => 'encrypted',
             'email' => 'encrypted',
         ];
     }

@@ -77,7 +77,7 @@
         <!-- task modify -->
         <div class="mt-5 d-flex gap-3" style="border-top: 1px solid var(--border-color-light); padding-top: 30px;">
 
-            @if (Auth::user() -> role == 'admin')
+            @if (Auth::user() -> role == 'super_admin' or Auth::user() -> role == 'admin')
                 <a href="{{ route('edit', ['id' => $data['task'] ->id]) }}" class="btn btn-secondary"><i class="fas fa-edit"></i>ویرایش</a>
 
                 <form action="{{ route('tasks.destroy', ['id' => $data['task'] -> id]) }}" method="POST" onsubmit="return confirm('آیا از حذف این تسک مطمئنی؟')">
@@ -93,12 +93,14 @@
                 <a href="{{ route('edit', ['id' => $data['task'] ->id]) }}" class="btn btn-secondary"><i class="fas fa-edit"></i>ویرایش</a>
             @endif
 
-            <form action="{{ route('done', ['id' => $data['task'] -> id]) }}" method="post">
-                @csrf
-                <input type="hidden" name="status" value="انجام شده">
-                <button class="btn btn-success"><i class="fas fa-check-circle"></i>علامت زدن به عنوان انجام شده</button>
-            </form>
-            <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ route('dashboard') }}'"><i class="fas fa-times"></i> لغو</button>
+            @if($data['task']->status != 'انجام شده')
+                <form action="{{ route('done', ['id' => $data['task'] -> id]) }}" method="post">
+                    @csrf
+                    <input type="hidden" name="status" value="انجام شده">
+                    <button class="btn btn-success"><i class="fas fa-check-circle"></i>علامت زدن به عنوان انجام شده</button>
+                </form>
+            @endif
+            <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ route('dashboard') }}'"><i class="fas fa-times"></i> بازگشت</button>
         </div>
     </div>
           

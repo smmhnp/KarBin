@@ -32,19 +32,19 @@
                 <div class="form-group">
                     <label for="taskPriority" class="form-label">اولویت</label>
                     <select name="preference" class="form-control" id="taskPriority">
-                    <option value="متوسط" {{ old('preference') == 'متوسط' ? 'selected' : '' }}>متوسط</option>
-                    <option value="بالا" {{ old('preference') == 'بالا' ? 'selected' : '' }}>بالا</option>
-                    <option value="پایین" {{ old('preference') == 'پایین' ? 'selected' : '' }}>پایین</option>
+                        <option value="متوسط" {{ old('preference') == 'متوسط' ? 'selected' : '' }}>متوسط</option>
+                        <option value="بالا" {{ old('preference') == 'بالا' ? 'selected' : '' }}>بالا</option>
+                        <option value="پایین" {{ old('preference') == 'پایین' ? 'selected' : '' }}>پایین</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label for="taskStatus" class="form-label">وضعیت</label>
                     <select name="status" class="form-control" id="taskStatus">
-                    <option value="برای انجام" {{ old('status') == 'برای انجام' ? 'selected' : '' }}>برای انجام</option>
-                    <option value="در حال انجام" {{ old('status') == 'در حال انجام' ? 'selected' : '' }}>در حال انجام</option>
-                    <option value="بازبینی" {{ old('status') == 'بازبینی' ? 'selected' : '' }}>بازبینی</option>
-                    <option value="انجام شده" {{ old('status') == 'انجام شده' ? 'selected' : '' }}>انجام شده</option>
+                        <option value="برای انجام" {{ old('status') == 'برای انجام' ? 'selected' : '' }}>برای انجام</option>
+                        <option value="در حال انجام" {{ old('status') == 'در حال انجام' ? 'selected' : '' }}>در حال انجام</option>
+                        <option value="بازبینی" {{ old('status') == 'بازبینی' ? 'selected' : '' }}>بازبینی</option>
+                        <option value="انجام شده" {{ old('status') == 'انجام شده' ? 'selected' : '' }}>انجام شده</option>
                     </select>
                 </div>
 
@@ -56,12 +56,12 @@
                 <div class="form-group">
                     <label for="taskAssignee" class="form-label">مسئول</label>
                     <select name="undertaking" class="form-control" id="taskAssignee">
-                    <option value=""></option>
-                    @foreach ($users as $user)
-                    <option value="{{ $user['nickname'] }}" {{ old('undertaking') == $user['nickname'] ? 'selected' : '' }}>
-                        {{ $user['nickname'] }}
-                    </option>
-                    @endforeach
+                        <option value=""></option>
+                        @foreach ($users as $user)
+                            <option value="{{ $user['nickname'] }}" {{ old('undertaking') == $user['nickname'] ? 'selected' : '' }}>
+                                {{ $user['nickname'] }}
+                            </option>
+                        @endforeach
                     </select>
                 </div>
 

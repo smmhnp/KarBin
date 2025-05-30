@@ -31,7 +31,13 @@
 
             <div class="form-group">
                 <label for="role">نقش کاربر</label>
-                <input type="text" name="role" id="role" class="form-control" value="{{ old('role') }}" required>
+                <select name="role" class="form-control" id="role" required>
+                    <option value=""> -- </option>
+                    <option value="super_admin" {{ old('role') == 'super_admin' ? 'selected' : '' }}>super_admin</option>
+                    <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>admin</option>
+                    <option value="developer" {{ old('role') == 'developer' ? 'selected' : '' }}>developer</option>
+                    <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>user</option>
+                </select>
             </div>
 
             <div class="form-group">

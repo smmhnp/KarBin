@@ -4,12 +4,12 @@
     <div class="container">
 
         <?php //flash('task_message'); ?>
-
+        
         <h2><i class="fas fa-list-ul"></i>داشبورد وظایف</h2>
 
         <div class="card">
 
-            <div class="dashboard-filters">
+        <div class="dashboard-filters">
                 <div class="search-filter input-group input-group-sm">
                     <span class="input-group-text"><i class="fas fa-search"></i></span>
                     <input type="search" class="form-control form-control-sm" placeholder="جستجو در وظایف..." id="dashboard-search">
@@ -106,8 +106,8 @@
                 <table class="table">
                     <thead> 
                         <tr> 
-                            <th>عنوان وظیفه</th> 
                             <th>پروژه</th> 
+                            <th>عنوان وظیفه</th> 
                             <th>مسئول (نام مستعار)</th> 
                             <th>اولویت</th> 
                             <th>مهلت</th> 
@@ -117,20 +117,22 @@
                     </thead>
 
                     <tbody id="tasks-table-body">
-                        @foreach ($data as $item)
-                            <tr data-status="inprogress" data-priority="high" data-project="alpha" data-assignee="Lead"> 
-                                <td>{{ $item['title'] }}</td> 
-                                <td><a href="#task-detail-screen">{{ $item['project_name'] }}</a></td> 
-                                <td class="user-nickname-cell">{{ $item['undertaking'] }}</td> 
-                                <td><span class="badge badge-priority-{{ color_preference_style ($item -> preference) }}">{{ $item['preference'] }}</span></td> 
-                                <td>{{ $item['deadline']->toDateString() }}</td> 
-                                <td><span class="badge badge-status-{{ color_status_style ($item -> status) }}">{{ $item['status'] }}</span></td> 
-                                <td>
-                                    <div class="button-group"> 
-                                        <a href="{{ route('task.view', ['id' => $item->id]) }}" class="btn btn-sm btn-secondary" title="مشاهده"><i class="fas fa-eye"></i></a>
-                                    </div>
-                                </td> 
-                            </tr>
+                        @foreach ($tasks as $task)
+                            @foreach ($task -> tasks as $item)
+                                <tr data-status="inprogress" data-priority="high" data-project="alpha" data-assignee="Lead"> 
+                                    <td>{{ $task -> title }}</td>
+                                    <td>{{ $item -> project_name }}</td> 
+                                    <td>{{ $item -> undertaking }}</td> 
+                                    <td><span class="badge badge-priority-{{ color_preference_style ($item -> preference) }}">{{ $item -> preference }}</span></td> 
+                                    <td>{{ jDate($item -> deadline)->ago() }}</td> 
+                                    <td><span class="badge badge-status-{{ color_status_style ($item -> status) }}">{{ $item -> status }}</span></td> 
+                                    <td>
+                                        <div class="button-group"> 
+                                            <a href="{{ route('task.view', ['id' => $item->id]) }}" class="btn btn-sm btn-secondary" title="مشاهده"><i class="fas fa-eye"></i></a>
+                                        </div>
+                                    </td> 
+                                </tr>
+                            @endforeach
                         @endforeach
                     </tbody>
                 </table>

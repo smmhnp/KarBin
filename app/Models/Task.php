@@ -24,14 +24,16 @@ class Task extends Model
         return $this->hasMany(Comment::class);
     }
 
+    public function titles()
+    {
+        return $this->belongsTo(Title::class);
+    }
+
     protected function casts(): array
     {
         return [
-            'title'         => 'encrypted',
             'project_name'  => 'encrypted',
             'content'       => 'encrypted',
-            'undertaking'   => 'encrypted',
-            'preference'    => 'encrypted',
 
             'deadline'      => 'datetime',
         ];
