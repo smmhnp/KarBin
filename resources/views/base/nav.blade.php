@@ -3,7 +3,9 @@
         <i class="fas fa-bars"></i>
     </button>
     <div class="logo">
-        <img src="{{ asset('images/logo.png') }}" alt="Kar Bin Logo">
+        <a href="{{ route('dashboard') }}">
+            <img src="{{ asset('images/logo.png') }}" alt="Kar Bin Logo">
+        </a>
     </div>
     
     <nav class="main-nav">
