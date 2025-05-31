@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('email_hash')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('status')->default('active');
+            $table->string('status')->default('inactive');
             $table->rememberToken();
             $table->timestamps();
         });

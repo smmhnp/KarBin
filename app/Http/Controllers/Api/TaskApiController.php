@@ -49,7 +49,7 @@ class TaskApiController extends ApiController
 
     //................................................edit...............................
 
-  public function editSubmit(Request $request, $id)
+    public function editSubmit(Request $request, $id)
     {
         $task = Task::find($id);
 
@@ -59,7 +59,7 @@ class TaskApiController extends ApiController
         
 
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
+            'title_id' => 'required|string|max:255',
             'project_name' => 'required|string|max:255',
             'content' => 'required|string',
             'undertaking' => 'required|string|max:255',
@@ -105,7 +105,7 @@ class TaskApiController extends ApiController
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
+            'title_id' => 'required|string|max:255',
             'project_name' => 'required|string|max:255',
             'content' => 'required|string',
             'undertaking' => 'required|string|max:255',

@@ -57,7 +57,12 @@ class UserController extends ApiController
             return back()->withErrors(['message' => 'ایمیل یا رمز عبور اشتباه است'])->withInput();
         }
 
+        if ($user['status'] == 'inactive'){
+            return back()->withErrors(['message' => 'کاربر غیر فعال است'])->withInput();
+        }
+
         Auth::login($user);
+
         return redirect()->route('dashboard')->with('success', 'ورود با موفقیت انجام شد');
     }
 
@@ -139,7 +144,7 @@ class UserController extends ApiController
             'password' => Hash::make($validated['password']),
         ]);
 
-        return view('users/profile', ['message' => 'successfuly register!']);
+        return redirect()->route('users.all')->with('success', 'کاربر با موفقیت اضافه شد');
     }
 
 
