@@ -12,7 +12,7 @@ class Task extends Model
     protected $table = 'tasks';  
 
     protected $fillable = [
-        'user_id', 'title', 'project_name', 'content',
+        'user_id', 'title_id', 'project_name', 'content',
         'undertaking', 'preference', 'deadline', 'status',
         'attachment_path'
     ];
@@ -24,18 +24,17 @@ class Task extends Model
         return $this->hasMany(Comment::class);
     }
 
-    public function titles()
+    // public function titles()
+    // {
+    //     return $this->belongsTo(Title::class);
+    // }
+
+    public function title()
     {
         return $this->belongsTo(Title::class);
     }
 
-    protected function casts(): array
-    {
-        return [
-            'project_name'  => 'encrypted',
-            'content'       => 'encrypted',
-
-            'deadline'      => 'datetime',
-        ];
-    }
+    protected $casts = [
+        'deadline' => 'date',
+    ];  
 }

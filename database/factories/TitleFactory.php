@@ -17,7 +17,7 @@ class TitleFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->randomElement(['server', 'form', 'backend', 'frontend', 'UI', 'database']),
+            'title' => fake()->randomElement(['server', 'form', 'backend', 'frontend', 'UI', 'database', 'securety', 'DevOps', 'Test']),
             'user_id' => fake()->randomElement(['1', '2', '3', '4', '5']),
             'deadline' => fake()->date()
         ];

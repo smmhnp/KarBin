@@ -58,3 +58,16 @@ function color_status_style ($preference){
 
     return $color;
 }
+
+function status ($status){
+    switch ($status):
+        case 'active':
+            $result = 'فعال';
+            break;
+        case 'inactive':
+            $result = 'غیرفعال';
+            break;
+    endswitch;
+
+    return $result;
+}

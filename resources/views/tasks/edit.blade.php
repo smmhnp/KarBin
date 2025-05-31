@@ -2,7 +2,7 @@
 @section('content')
 
     <div class="container">
-        <h2><i class="fas fa-edit"></i>ایجاد / ویرایش وظیفه</h2>
+        <h2><i class="fas fa-edit"></i>ویرایش وظیفه</h2>
 
          @if ($errors->any())
                 <div class="alert alert-danger" role="alert">
@@ -16,12 +16,22 @@
 
                 <div class="form-group">
                     <label for="taskTitle" class="form-label">عنوان</label>
-                    <input name="title" type="text" class="form-control @error('title') is-invalid @enderror" value="{{ old('title', $data['task']->title) }}" id="taskTitle">
+                    <select name="title_id" class="form-control" id="taskAssignee">
+                        <option value="{{ $data['task']->id }}">{{ $data['task'] -> title -> title }}</option>
+                        @foreach ($data['title'] as $title)
+                            @if ($title['title'] == $data['task'] -> title -> title)
+                                @continue
+                            @endif
+                            <option value="{{ $title['id'] }}" {{ old('title') == $title['title'] ? 'selected' : '' }}>
+                                {{ $title['title'] }}
+                            </option>
+                        @endforeach
+                    </select>                
                 </div>
 
                 <div class="form-group">
                     <label for="taskDescription" class="form-label">شرح کامل</label>
-                    <textarea name="content" class="form-control @error('content') is-invalid @enderror" id="taskDescription" rows="5">{{ old('content', $data['task']->content) }}</textarea>
+                    <textarea name="content" class="form-control @error('content') is-invalid @enderror" id="taskDescription" rows="5">{{ old('content', $data['task'] -> content) }}</textarea>
                 </div>
 
                 <div class="grid-container">

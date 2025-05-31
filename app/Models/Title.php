@@ -12,7 +12,9 @@ class Title extends Model
     protected $table = 'titles';  
     
     protected $fillable = [
-        'title'
+        'title',
+        'user_id',
+        'deadline'
     ];
     
     public function tasks()
@@ -27,10 +29,7 @@ class Title extends Model
 
     protected $guarded = ['id'];
 
-    protected function casts(): array
-    {
-        return [
-            'title' => 'encrypted',
-        ];
-    }
+    protected $casts = [
+        'deadline' => 'date',
+    ];
 }

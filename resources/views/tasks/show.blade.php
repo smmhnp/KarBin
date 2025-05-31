@@ -5,7 +5,7 @@
         <h2><i class="fas fa-clipboard-list"></i>جزئیات وظیفه</h2>
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h3 class="card-title" style="margin-bottom: 0;">{{ $data['task'] -> title }}</h3>
+                <h3 class="card-title" style="margin-bottom: 0;">{{ $data['task'] -> title -> title }}</h3>
                 <span class="badge badge-status-{{ color_status_style ($data['task'] -> status) }}">{{ $data['task'] -> status }}</span>
             </div>
 

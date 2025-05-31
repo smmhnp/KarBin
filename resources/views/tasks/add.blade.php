@@ -2,20 +2,28 @@
 @section('content')
 
     <div class="container">
-        <h2><i class="fas fa-edit"></i>ایجاد / ویرایش وظیفه</h2>
+        <h2><i class="fas fa-edit"></i>ایجاد وظیفه</h2>
+        
+        @if ($errors->any())
+            <div class="alert alert-danger" role="alert">
+                {{ $errors->first() }}
+            </div>
+        @endif
+        
         <div class="card">
             <form novalidate action="{{ route('addsubmit') }}" method="post" enctype="multipart/form-data">
                 @csrf
 
-                 @if ($errors->any())
-                    <div class="alert alert-danger" role="alert">
-                        {{ $errors->first() }}
-                    </div>
-                @endif
-
                 <div class="form-group">
                     <label for="taskTitle" class="form-label">عنوان</label>
-                    <input name="title" type="text" class="form-control" id="taskTitle" value="{{ old('title') }}">
+                    <select name="title_id" class="form-control" id="taskAssignee">
+                        <option value=""></option>
+                        @foreach ($titles as $title)
+                            <option value="{{ $title['id'] }}" {{ old('title') == $title['title'] ? 'selected' : '' }}>
+                                {{ $title['title'] }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="form-group">

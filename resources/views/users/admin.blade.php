@@ -33,13 +33,20 @@
                                 <td>{{ $user -> email }}</td> 
                                 <td>{{ Role ($user -> role) }}</td> 
                                 <td>
-                                    <span class="badge badge-status-active">فعال</span>
+                                    <span class="badge badge-status-{{$user -> status}}">{{ status ($user -> status) }}</span>
                                 </td> 
                                 <td>{{ $user -> created_at -> toDateString() }}</td> 
                                 <td>
                                     <div class="button-group">
                                         <a href="{{ route('modify', ['id' => $user->id]) }}" class="btn btn-sm btn-secondary" title="ویرایش"><i class="fas fa-user-edit"></i></a> 
-                                        <button class="btn btn-sm btn-danger" title="غیرفعال کردن"><i class="fas fa-user-slash"></i></button>
+
+                                        <form action="{{ route('user.status', $user->id) }}" method="post" style="display:inline;">
+                                            @csrf
+                                            <input type="hidden" name="status" value="{{ $user->status === 'active' ? 'inactive' : 'active' }}">
+                                            <button type="submit" class="btn btn-sm {{ $user->status === 'active' ? 'btn-danger' : 'btn-success' }}">
+                                                <i class="fas {{ $user->status === 'active' ? 'fa-user-slash' : 'fa-user-check' }}"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </td> 
                             </tr>

@@ -39,11 +39,6 @@ class TaskController extends Controller
             return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
         }
 
-        // $tasks = Task::all();
-        // $title = Title::all();
-
-        // return view('tasks.index', ['tasks' => $tasks, 'titles' => $title]);
-
         $tasks = Title::with('tasks')->get();
 
         return view('tasks.index', ['tasks' => $tasks]);
@@ -85,6 +80,20 @@ class TaskController extends Controller
         return view('tasks.projects', ['projects' => $projects]);
     }
 
+
+    //................................................showProject........................
+
+    public function showProject($id) {
+
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
+        }
+
+        $tasks = Title::with('tasks')->find($id);
+
+        return view('tasks.ShowProject', ['tasks' => $tasks]);
+
+    }
     
     //................................................show...............................
 
@@ -106,11 +115,13 @@ class TaskController extends Controller
 
     public function edit($id){
 
-        $task = Task::find($id);
+        $task = Task::with('title')->findOrFail($id);
+        $title = Title::all();
         $users = User::all();
 
         $data = [
            'task' => $task,
+           'title' => $title,
            'users' => $users 
         ];
 
@@ -121,13 +132,10 @@ class TaskController extends Controller
     {
         $task = Task::findOrFail($id);
 
-        // if ($task->user_id !== Auth::id()) {
-        //     return redirect()->route('tasks.index')->with('error', 'شما دسترسی به این تسک را ندارید.');
-        // }
-
         if ($request->isMethod('post')) {
+
             $validator = Validator::make($request->all(), [
-                'title' => 'required|string|max:255',
+                'title_id' => 'required',
                 'project_name' => 'required|string|max:255',
                 'content' => 'required|string',
                 'undertaking' => 'required|string|max:255',
@@ -136,9 +144,7 @@ class TaskController extends Controller
                 'status' => 'required|string|max:255',
                 'attachment' => 'nullable|file|max:5120',
             ], [
-                'title.required' => 'لطفاً عنوان تسک را وارد کنید.',
-                'title.max' => 'عنوان تسک نباید بیشتر از ۲۵۵ کاراکتر باشد.',
-                'project_name.required' => 'لطفاً نام پروژه را وارد کنید.',
+                'title_id.required' => 'لطفاً عنوان تسک را وارد کنید.',
                 'content.required' => 'لطفاً توضیحات تسک را وارد کنید.',
                 'undertaking.required' => 'لطفاً مسئولیت را وارد کنید.',
                 'preference.required' => 'لطفاً ترجیحات را وارد کنید.',
@@ -180,6 +186,50 @@ class TaskController extends Controller
     }
 
 
+    //................................................EditProject...............................
+
+    public function EditProject($id){
+
+        $title = Title::with('user') -> findOrFail($id);
+        $users = User::all();
+
+        $data = [
+           'title' => $title,
+           'users' => $users 
+        ];
+
+        return view('tasks.EditProject', ['data' => $data]);
+    }
+
+    public function EditProjectSubmit(Request $request, $id)
+    {
+        $title = Title::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'undertaking' => 'required',
+            'deadline' => 'required|date',
+        ], [
+            'title.required' => 'لطفاً عنوان تسک را وارد کنید.',
+            'title.max' => 'عنوان تسک نباید بیشتر از ۲۵۵ کاراکتر باشد.',
+            'undertaking.required' => 'لطفاً مسئولیت را وارد کنید.',
+            'deadline.required' => 'لطفاً تاریخ انقضا را وارد کنید.',
+            'deadline.date' => 'لطفاً تاریخ را به صورت صحیح وارد کنید.',
+        ]);
+         
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+        
+        $title->update([
+            'title' => $request->input('title'),
+            'user_id' => $request->input('undertaking'),
+            'deadline' => $request->input('deadline'),
+        ]);
+
+        return redirect()->route('dashboard')->with('success', 'پروژه با موفقیت ویرایش شد');
+    }
+
     //................................................add................................
 
     public function add(){
@@ -189,14 +239,15 @@ class TaskController extends Controller
         }
 
         $users = User::all();
+        $titles = Title::all();
         
-        return view('tasks.add', ['users' => $users]);
+        return view('tasks.add', ['users' => $users, 'titles' => $titles]);
     }
 
     public function addsubmit(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'title_id' => 'required',
             'project_name' => 'required|string|max:255',
             'content' => 'required|string',
             'undertaking' => 'required|string|max:255',
@@ -205,8 +256,7 @@ class TaskController extends Controller
             'status' => 'required|string|max:255',
             'attachment' => 'nullable|file|max:5120',
         ], [
-            'title.required' => 'لطفاً عنوان تسک را وارد کنید.',
-            'title.max' => 'عنوان تسک نباید بیشتر از ۲۵۵ کاراکتر باشد.',
+            'title_id.required' => 'لطفاً عنوان تسک را وارد کنید.',
             'content.required' => 'لطفاً توضیحات تسک را وارد کنید.',
             'undertaking.required' => 'لطفاً مسئولیت را وارد کنید.',
             'preference.required' => 'لطفاً ترجیحات را وارد کنید.',
@@ -225,7 +275,7 @@ class TaskController extends Controller
 
         Task::create([
             'user_id' => Auth::id(),
-            'title' => $validated['title'],
+            'title_id' => $validated['title_id'],
             'project_name' => $validated['project_name'],
             'content' => $validated['content'],
             'undertaking' => $validated['undertaking'],
@@ -238,6 +288,42 @@ class TaskController extends Controller
         return redirect()->route('dashboard')->with('success', 'تسک با موفقیت اضافه شد.');
     }
 
+    
+    //................................................AddProject................................
+
+    public function AddProject(){
+
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
+        }
+
+        $users = User::all();
+        
+        return view('tasks.AddProject', ['users' => $users]);
+    }
+
+    public function AddProjectSubmit(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'undertaking' => 'required',
+            'deadline' => 'required|date',
+        ], [
+            'title.required' => 'لطفاً عنوان تسک را وارد کنید.',
+            'title.max' => 'عنوان تسک نباید بیشتر از ۲۵۵ کاراکتر باشد.',
+            'undertaking.required' => 'لطفاً مسئولیت را وارد کنید.',
+            'deadline.required' => 'لطفاً تاریخ انقضا را وارد کنید.',
+            'deadline.date' => 'لطفاً تاریخ را به صورت صحیح وارد کنید.',
+        ]);
+
+        Title::create([
+            'title' => $validated['title'],
+            'user_id' => $validated['undertaking'],
+            'deadline' => $validated['deadline'],
+        ]);
+
+        return redirect()->route('dashboard')->with('success', 'تسک با موفقیت اضافه شد.');
+    }
 
     //................................................delete.............................
 
@@ -281,6 +367,7 @@ class TaskController extends Controller
         return Storage::download($filePath);
     }
 
+    
     //................................................done...............................
 
     public function done(Request $request, $id){

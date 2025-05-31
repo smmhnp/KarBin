@@ -7,7 +7,7 @@
             <div class="section-header">
                 <h3 style="margin-bottom: 0;">لیست پروژه‌ها</h3>
                @if (Auth::user()->role == 'super_admin')
-                    <a href="<?php //echo URLROOT; ?>tasks/add" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i>پروژه جدید</a>
+                    <a href="{{ route('AddProject') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i>پروژه جدید</a>
                 @endif
             </div>
             <div class="table-container">
@@ -31,9 +31,12 @@
                                 <td>{{ jDate($item -> created_at) -> ago() }}</td> 
                                 <td>{{ jDate($item -> deadline) -> ago() }}</td> 
                                 <td>
-                                    <a href=" " class="btn btn-sm btn-secondary" title="نمایش">
+                                    <a href="{{ route('showProject', ['id' => $item -> id]) }}" class="btn btn-sm btn-secondary" title="نمایش">
                                         <i class="fas fa-eye"></i>
                                     </a>
+                                    <a href="{{ route('EditProject', ['id' => $item -> id]) }}" class="btn btn-sm btn-secondary" title="ویرایش">
+                                        <i class="fas fa-edit"></i>
+                                    </a> 
                                 </td>
                             </tr> 
                         @endforeach

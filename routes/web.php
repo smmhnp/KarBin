@@ -28,6 +28,8 @@ Route::get('/users/admin', [UserController::class, 'users'])->name('users.all');
 Route::get('users/modify/{id}', [UserController::class, 'modify'])->name('modify');
 Route::post('users/modify/{id}', [UserController::class, 'modifySubmit'])->name('modifysubmit');
 
+Route::post('users/status/{id}', [UserController::class, 'status'])->name('user.status');
+
 //....................................................login.whit.google..................
 
 Route::get('/google-login', [UserController::class, 'google_login'])->name('google_login');
@@ -63,3 +65,11 @@ Route::get('/download/{id}', [TaskController::class, 'webDownload'])->name('file
 Route::post('/task/{task}/comment', [CommentController::class, 'store'])->name('comment');
 
 Route::post('task/done/{id}', [TaskController::class, 'done'])->name('done');
+
+Route::get('/project/add', [TaskController::class, 'AddProject'])->name('AddProject');
+Route::post('/project/add', [TaskController::class, 'AddProjectSubmit'])->name('AddProjectSubmit');
+
+Route::get('/project/edit/{id}', [TaskController::class, 'EditProject'])->name('EditProject');
+Route::post('/project/edit/{id}', [TaskController::class, 'EditProjectSubmit'])->name('EditProjectSubmit');
+
+Route::get('/project/show/{id}', [TaskController::class, 'showProject'])->name('showProject');

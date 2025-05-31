@@ -13,6 +13,6 @@ class TitleSeeder extends Seeder
      */
     public function run(): void
     {
-        Title::factory(5)->create();        
+        Title::factory(3)->create();        
     }
 }

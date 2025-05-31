@@ -349,4 +349,17 @@ class UserController extends ApiController
 
         return redirect('/dashboard');
     }
+
+    
+    //................................................done...............................
+
+    public function status(Request $request, $id){
+        $user = User::findOrFail($id);
+
+        $user->update([
+            'status' => $request->input('status'),
+        ]);
+
+        return redirect()->route('users.all')->with('success', 'وضعیت کاربر به‌روزرسانی شد');
+    }
 }
