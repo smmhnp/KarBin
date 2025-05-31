@@ -27,13 +27,15 @@
         <a href="{{ route('add') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> وظیفه جدید</a>
 
         @if (Auth::check())
-            <div class="user-menu">
-                <div class="user-avatar">{{ isset(Auth::user()->firstname) ? Str::substr(Auth::user()->firstname, 0, 3) : '' }}</div>
-                <div class="user-info">
-                    <span class="user-nickname">{{ isset(Auth::user()->firstname) ? Auth::user()->firstname : 'Lead' }}</span>
-                    <span class="user-role">{{ isset(Auth::user()->role) ? Role (Auth::user()->role) : '' }}</span>
+            <a href="{{ route('profile') }}">
+                <div class="user-menu">
+                    <div class="user-avatar">{{ isset(Auth::user()->firstname) ? Str::substr(Auth::user()->firstname, 0, 3) : '' }}</div>
+                    <div class="user-info">
+                        <span class="user-nickname">{{ isset(Auth::user()->firstname) ? Auth::user()->firstname : 'Lead' }}</span>
+                        <span class="user-role">{{ isset(Auth::user()->role) ? Role (Auth::user()->role) : '' }}</span>
+                    </div>
                 </div>
-            </div>
+            </a>
 
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
