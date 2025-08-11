@@ -315,7 +315,7 @@ class UserController extends ApiController
                 'role' => 'user',
                 'unit' => 'dev',
                 'email' => $googleUser->getEmail(),
-                'email_hash' => Hash::make($googleUser->getEmail()),
+                'email_hash' => hash('sha256', $googleUser->getEmail()),
                 'password' => Hash::make(Str::random(16)), 
             ]);
         }
