@@ -93,12 +93,14 @@ password: password
 * [smmhnp](https://github.com/smmhnp)
 
   برای استفاده از برنامه با داکر کافیه برانامه را روی سیستم pull کرده و در دایرکتور اصلی برنامه درستورات زیر را وارد کنید:
+  ```bash
   docker compose up -d
   docker exec -it karbin-app php artisn migrate
   docker exec -it karbin-app php artisn db:seed
   docker exec -it karbin-app php artisn db:seed TitleSeeder
   docker exec -it karbin-app php artisn db:seed TaskSeeder
-   سپس برنامه اصلی در ادرس localhost:8000 اجرا شده و phpmyadmin در ادرس localhost:8080 اجرا خواهد شد.
+ ```
+### سپس برنامه اصلی در ادرس localhost:8000 اجرا شده و phpmyadmin در ادرس localhost:8080 اجرا خواهد شد.
 
 
 
