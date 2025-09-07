@@ -84,25 +84,23 @@ php artisan serve
 
 پروژه روی `http://localhost:8000` قابل دسترسی خواهد بود.
 
-## توسعه‌دهنده
-
-* [smmhnp](https://github.com/smmhnp)
-
-## مشارکت در پروژه
-
-در صورت تمایل به همکاری، لطفاً یک Pull Request ایجاد کرده یا Issue ثبت کنید.
-
-## لایسنس
-
-این پروژه تحت لایسنس MIT منتشر شده است.
-
-### **اطلاعات ورود**
-
 نام کاربری و رمز عبور برای ورود به برنامه:
 
-email: [admin@gmail.com](mailto:admin@gmail.com)
+email: admin@example.com
+password: password
 
-password: admin1234
+## توسعه‌دهنده
+* [smmhnp](https://github.com/smmhnp)
+
+  برای استفاده از برنامه با داکر کافیه برانامه را روی سیستم pull کرده و در دایرکتور اصلی برنامه درستورات زیر را وارد کنید:
+  docker compose up -d
+  docker exec -it karbin-app php artisn migrate
+  docker exec -it karbin-app php artisn db:seed
+  docker exec -it karbin-app php artisn db:seed TitleSeeder
+  docker exec -it karbin-app php artisn db:seed TaskSeeder
+   سپس برنامه اصلی در ادرس localhost:8000 اجرا شده و phpmyadmin در ادرس localhost:8080 اجرا خواهد شد.
+
+
 
 
 
