@@ -70,7 +70,10 @@ DB_PASSWORD=yourpassword
 ### ساخت جداول و داده نمونه:
 
 ```bash
-php artisan migrate --seed
+php artisan migrate
+php artisan db:seed
+php artisan db:seed TitleSeeder
+php artisan db:seed TaskSeeder
 ```
 
 ### اجرای برنامه
