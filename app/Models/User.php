@@ -31,6 +31,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Comment::class);
     }
 
+    public function titles()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     protected $hidden = [
         'remember_token',
     ];

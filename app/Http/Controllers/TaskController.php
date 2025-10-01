@@ -36,11 +36,6 @@ class TaskController extends Controller
 
     public function dashboard()
     {
-
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
-        }
-
         $tasks = Title::with('tasks')->get();
 
         return view('tasks.index', ['tasks' => $tasks]);
@@ -52,11 +47,6 @@ class TaskController extends Controller
 
     public function board()
     {
-        
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
-        }
-        
         $tasks = Title::with('tasks')->get();
 
         return view('tasks.board', ['tasks' => $tasks]);
@@ -66,12 +56,7 @@ class TaskController extends Controller
     //................................................Project.List..........................
 
     public function list()
-    {
-
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
-        }
-        
+    {       
         $projects = Title::withCount([
             'tasks',
             'tasks as not_done_tasks_count' => function ($query) {
@@ -85,12 +70,8 @@ class TaskController extends Controller
 
     //................................................showProject........................
 
-    public function showProject($id) {
-
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
-        }
-
+    public function showProject($id) 
+    {
         $tasks = Title::with('tasks')->find($id);
 
         return view('tasks.ShowProject', ['tasks' => $tasks]);
@@ -99,7 +80,8 @@ class TaskController extends Controller
     
     //................................................show...............................
 
-    public function view($id){
+    public function view($id)
+    {
 
         $task = Task::find($id);
         $comment = Comment::with('user')->where('task_id', $task->id)->get();
@@ -115,8 +97,8 @@ class TaskController extends Controller
 
     //................................................edit...............................
 
-    public function edit($id){
-
+    public function edit($id)
+    {
         $task = Task::with('title')->findOrFail($id);
         $title = Title::all();
         $users = User::all();
@@ -160,8 +142,8 @@ class TaskController extends Controller
 
     //................................................EditProject...............................
 
-    public function EditProject($id){
-
+    public function EditProject($id)
+    {
         $title = Title::with('user') -> findOrFail($id);
         $users = User::all();
 
@@ -188,12 +170,8 @@ class TaskController extends Controller
 
     //................................................add................................
 
-    public function add(){
-
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
-        }
-
+    public function add()
+    {
         $users = User::all();
         $titles = Title::all();
         
@@ -226,12 +204,8 @@ class TaskController extends Controller
     
     //................................................AddProject................................
 
-    public function AddProject(){
-
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
-        }
-
+    public function AddProject()
+    {
         $users = User::all();
         
         return view('tasks.AddProject', ['users' => $users]);
@@ -293,7 +267,8 @@ class TaskController extends Controller
     
     //................................................done...............................
 
-    public function done(Request $request, $id){
+    public function done(Request $request, $id)
+    {
         $task = Task::findOrFail($id);
 
         $task->update([

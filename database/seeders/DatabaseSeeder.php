@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
         );
 
         User::factory(10)->create();
-        Title::factory(3)->create();        
+        Title::factory(3)->create();
         Task::factory(10)->create();        
     }
 }

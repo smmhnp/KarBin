@@ -29,10 +29,6 @@ class UserController extends ApiController
 
     public function loginSubmit(loginRequest $request)
     {
-        if (Auth::check()) {
-            return redirect()->route('dashboard');
-        }
-
         $emailHash = hash('sha256', $request->email);
         $user = User::where('email_hash', $emailHash)->first();
 
@@ -54,10 +50,6 @@ class UserController extends ApiController
 
     public function create()
     {
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
-        }
-
         if (Auth::user()->role != 'super_admin'){
             return redirect()->route('dashboard');
         }
@@ -67,10 +59,6 @@ class UserController extends ApiController
 
     public function store(registerRequest $request)
     {
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
-        }
-
         if (Auth::user()->role != 'super_admin'){
             return redirect()->route('dashboard');
         }
@@ -92,11 +80,8 @@ class UserController extends ApiController
 
     //................................................modify............................
 
-     public function modify($id){
-        if (Auth::user()->role != 'super_admin'){
-            return redirect()->route('dashboard');
-        }
-
+    public function modify($id)
+    {
         $user = User::findOrFail($id);
 
         return view('users.modify', ['user' => $user]);
@@ -104,10 +89,6 @@ class UserController extends ApiController
 
     public function modifySubmit(modifyRequest $request, $id)
     {
-        if (Auth::user()->role != 'super_admin'){
-            return redirect()->route('dashboard');
-        }
-
         $user = User::findOrFail($id);
 
         $user->update([
@@ -128,10 +109,6 @@ class UserController extends ApiController
 
     public function logout(Request $request)
     {
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
-        }
-
         Auth::logout();
 
         $request->session()->invalidate();
@@ -145,20 +122,12 @@ class UserController extends ApiController
 
     public function profile()
     {
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
-        }
-
         $user = Auth::user();
         return view('users.profile', compact('user'));
     }
 
     public function change(profileRequest $request)
     {
-        if (!Auth::check()) {
-            return back()->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
-        }
-
         if (!Hash::check($request->current_password, Auth::user()->password)) {
             return back()
                 ->withErrors(['current_password' => 'رمز عبور فعلی نادرست است'])
@@ -176,7 +145,8 @@ class UserController extends ApiController
 
     //................................................admin..............................
 
-    public function users(){
+    public function users()
+    {
         if (!isset(Auth::user()->role)){
             return redirect()->route('dashboard');
         }
