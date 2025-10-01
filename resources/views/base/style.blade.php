@@ -478,12 +478,13 @@
         transition: background-color 0.3s ease;
     }
 
-    .google-btn img {
-        width: 30px;
-        margin-right: 10px;
+    .btn-google {
+        color: #545454;
+        background-color: #ffffff;
+        box-shadow: 0 1px 2px 1px #ddd;
     }
-
-    .google-btn:hover {
+    
+    .btn-google:hover {
         background-color: #f1f1f1;
     }
     

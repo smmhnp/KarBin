@@ -42,11 +42,19 @@
                     <i class="fas fa-sign-in-alt"></i>
                 </button>
                 
-                <!-- Forgot Password -->
-                <div class="text-center mt-4"> 
-                    <small><a href="#">بازیابی رمز عبور</a></small> 
+                <!-- Social Logins -->
+                <div class="d-flex gap-2 mt-2">
+                    <a href="{{ route('google_login') }}" class="btn btn-light btn-google btn-lg flex-fill d-flex align-items-center justify-content-center">
+                        <img src="https://www.svgrepo.com/show/475656/google-color.svg" style="width:24px" class="me-2">
+                        <span>گوگل</span>
+                    </a>
+
+                    <a href="{{ route('github_login') }}" class="btn btn-dark btn-lg flex-fill d-flex align-items-center justify-content-center">
+                        <i class="fab fa-github me-2"></i>
+                        <span>گیت‌هاب</span>
+                    </a>
                 </div>
-                
+
             </form>
             
         </div>

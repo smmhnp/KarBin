@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
-    public function store(Request $request, Task $task)
+    public function __invoke(Request $request, Task $task)
     {
         $request->validate(['body' => 'required']);
 

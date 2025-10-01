@@ -2,6 +2,13 @@
 @section('content')
 
     <div class="container">
+
+            @if (session('error'))
+                <div class="alert alert-danger" role="alert">
+                    {{ session('error') }}
+                </div>
+            @endif
+
         <h2><i class="fas fa-clipboard-list"></i>جزئیات وظیفه</h2>
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">

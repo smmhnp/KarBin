@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\edieProjectRequest;
+use App\Http\Requests\editRequest;
+use App\Http\Requests\projectRequest;
+use App\Http\Requests\taskRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\Comment;
 use App\Models\Title;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
 
 
 class TaskController extends Controller
@@ -128,61 +130,31 @@ class TaskController extends Controller
         return view('tasks.edit', ['data' => $data]);
     }
 
-    public function editSubmit(Request $request, $id)
+    public function editSubmit(editRequest $request, $id)
     {
         $task = Task::findOrFail($id);
 
-        if ($request->isMethod('post')) {
-
-            $validator = Validator::make($request->all(), [
-                'title_id' => 'required',
-                'project_name' => 'required|string|max:255',
-                'content' => 'required|string',
-                'undertaking' => 'required|string|max:255',
-                'preference' => 'required|string|max:255',
-                'deadline' => 'required|date',
-                'status' => 'required|string|max:255',
-                'attachment' => 'nullable|file|max:5120',
-            ], [
-                'title_id.required' => 'لطفاً عنوان تسک را وارد کنید.',
-                'content.required' => 'لطفاً توضیحات تسک را وارد کنید.',
-                'undertaking.required' => 'لطفاً مسئولیت را وارد کنید.',
-                'preference.required' => 'لطفاً ترجیحات را وارد کنید.',
-                'deadline.required' => 'لطفاً تاریخ انقضا را وارد کنید.',
-                'deadline.date' => 'لطفاً تاریخ را به صورت صحیح وارد کنید.',
-                'status.required' => 'لطفاً وضعیت تسک را وارد کنید.',
-                'attachment.file' => 'فایل آپلودی باید یک فایل معتبر باشد.',
-                'attachment.max' => 'حجم فایل نباید بیشتر از ۵ مگابایت باشد.',
-            ]);
-
-            if ($validator->fails()) {
-                return back()->withErrors($validator)->withInput();
+        $attachmentPath = $task->attachment_path;
+        if ($request->hasFile('attachment') && $request->file('attachment')->isValid()) {
+            if ($attachmentPath && Storage::exists($attachmentPath)) {
+                Storage::delete($attachmentPath);
             }
 
-            $attachmentPath = $task->attachment_path;
-            if ($request->hasFile('attachment') && $request->file('attachment')->isValid()) {
-                if ($attachmentPath && Storage::exists($attachmentPath)) {
-                    Storage::delete($attachmentPath);
-                }
-
-                $attachmentPath = $request->file('attachment')->store('private/tasks', 'local');
-            }
-
-            $task->update([
-                'title' => $request->input('title'),
-                'project_name' => $request->input('project_name'),
-                'content' => $request->input('content'),
-                'undertaking' => $request->input('undertaking'),
-                'preference' => $request->input('preference'),
-                'deadline' => $request->input('deadline'),
-                'status' => $request->input('status'),
-                'attachment_path' => $attachmentPath,
-            ]);
-
-            return redirect()->route('dashboard')->with('success', 'تسک با موفقیت ویرایش شد');
+            $attachmentPath = $request->file('attachment')->store('private/tasks', 'local');
         }
 
-        return view('tasks.edit', compact('task'));
+        $task->update([
+            'title' => $request->input('title'),
+            'project_name' => $request->input('project_name'),
+            'content' => $request->input('content'),
+            'undertaking' => $request->input('undertaking'),
+            'preference' => $request->input('preference'),
+            'deadline' => $request->input('deadline'),
+            'status' => $request->input('status'),
+            'attachment_path' => $attachmentPath,
+        ]);
+
+        return redirect()->route('dashboard')->with('success', 'تسک با موفقیت ویرایش شد');
     }
 
 
@@ -201,25 +173,9 @@ class TaskController extends Controller
         return view('tasks.EditProject', ['data' => $data]);
     }
 
-    public function EditProjectSubmit(Request $request, $id)
+    public function EditProjectSubmit(edieProjectRequest $request, $id)
     {
         $title = Title::findOrFail($id);
-
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'undertaking' => 'required',
-            'deadline' => 'required|date',
-        ], [
-            'title.required' => 'لطفاً عنوان تسک را وارد کنید.',
-            'title.max' => 'عنوان تسک نباید بیشتر از ۲۵۵ کاراکتر باشد.',
-            'undertaking.required' => 'لطفاً مسئولیت را وارد کنید.',
-            'deadline.required' => 'لطفاً تاریخ انقضا را وارد کنید.',
-            'deadline.date' => 'لطفاً تاریخ را به صورت صحیح وارد کنید.',
-        ]);
-         
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
         
         $title->update([
             'title' => $request->input('title'),
@@ -244,29 +200,8 @@ class TaskController extends Controller
         return view('tasks.add', ['users' => $users, 'titles' => $titles]);
     }
 
-    public function addsubmit(Request $request)
+    public function addsubmit(taskRequest $request)
     {
-        $validated = $request->validate([
-            'title_id' => 'required',
-            'project_name' => 'required|string|max:255',
-            'content' => 'required|string',
-            'undertaking' => 'required|string|max:255',
-            'preference' => 'required|string|max:255',
-            'deadline' => 'required|date',
-            'status' => 'required|string|max:255',
-            'attachment' => 'nullable|file|max:5120',
-        ], [
-            'title_id.required' => 'لطفاً عنوان تسک را وارد کنید.',
-            'content.required' => 'لطفاً توضیحات تسک را وارد کنید.',
-            'undertaking.required' => 'لطفاً مسئولیت را وارد کنید.',
-            'preference.required' => 'لطفاً ترجیحات را وارد کنید.',
-            'deadline.required' => 'لطفاً تاریخ انقضا را وارد کنید.',
-            'deadline.date' => 'لطفاً تاریخ را به صورت صحیح وارد کنید.',
-            'status.required' => 'لطفاً وضعیت تسک را وارد کنید.',
-            'attachment.file' => 'فایل آپلودی باید یک فایل معتبر باشد.',
-            'attachment.max' => 'حجم فایل نباید بیشتر از ۵ مگابایت باشد.',
-        ]);
-
         $attachmentPath = null;
 
         if ($request->hasFile('attachment')) {
@@ -275,13 +210,13 @@ class TaskController extends Controller
 
         Task::create([
             'user_id' => Auth::id(),
-            'title_id' => $validated['title_id'],
-            'project_name' => $validated['project_name'],
-            'content' => $validated['content'],
-            'undertaking' => $validated['undertaking'],
-            'preference' => $validated['preference'],
-            'deadline' => $validated['deadline'],
-            'status' => $validated['status'],
+            'title_id' => $request['title_id'],
+            'project_name' => $request['project_name'],
+            'content' => $request['content'],
+            'undertaking' => $request['undertaking'],
+            'preference' => $request['preference'],
+            'deadline' => $request['deadline'],
+            'status' => $request['status'],
             'attachment_path' => $attachmentPath,
         ]);
 
@@ -302,24 +237,12 @@ class TaskController extends Controller
         return view('tasks.AddProject', ['users' => $users]);
     }
 
-    public function AddProjectSubmit(Request $request)
+    public function AddProjectSubmit(projectRequest $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'undertaking' => 'required',
-            'deadline' => 'required|date',
-        ], [
-            'title.required' => 'لطفاً عنوان تسک را وارد کنید.',
-            'title.max' => 'عنوان تسک نباید بیشتر از ۲۵۵ کاراکتر باشد.',
-            'undertaking.required' => 'لطفاً مسئولیت را وارد کنید.',
-            'deadline.required' => 'لطفاً تاریخ انقضا را وارد کنید.',
-            'deadline.date' => 'لطفاً تاریخ را به صورت صحیح وارد کنید.',
-        ]);
-
         Title::create([
-            'title' => $validated['title'],
-            'user_id' => $validated['undertaking'],
-            'deadline' => $validated['deadline'],
+            'title' => $request['title'],
+            'user_id' => $request['undertaking'],
+            'deadline' => $request['deadline'],
         ]);
 
         return redirect()->route('dashboard')->with('success', 'تسک با موفقیت اضافه شد.');
@@ -355,13 +278,13 @@ class TaskController extends Controller
         $task = Task::findOrFail($id);
 
         if (!$task->attachment_path) {
-            return response()->json(['message' => 'فایل پیوست وجود ندارد'], Response::HTTP_NOT_FOUND);
+            return redirect()->route('task.view', ['id' => $id])->with('error', 'فایل پیوست وجود ندارد');
         }
 
         $filePath = $task->attachment_path;
 
         if (!Storage::disk('local')->exists($filePath)) {
-            return response()->json(['message' => 'فایل یافت نشد'], Response::HTTP_NOT_FOUND);
+            return redirect()->route('task.view', ['id' => $id])->with('error', 'فایل یافت نشد');
         }
 
         return Storage::download($filePath);

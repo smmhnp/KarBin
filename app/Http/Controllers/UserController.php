@@ -4,15 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
+use App\Http\Requests\loginRequest;
+use App\Http\Requests\modifyRequest;
+use App\Http\Requests\profileRequest;
+use App\Http\Requests\registerRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Str;
-use Coderflex\LaravelTurnstile\Rules\TurnstileCheck;
-use Coderflex\LaravelTurnstile\Facades\LaravelTurnstile;
 
 
 
@@ -27,27 +27,10 @@ class UserController extends ApiController
         return view('users/login');
     }
 
-    public function loginSubmit(Request $request)
+    public function loginSubmit(loginRequest $request)
     {
         if (Auth::check()) {
             return redirect()->route('dashboard');
-        }
-
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required|min:6',
-            'cf-turnstile-response' => 'required',
-        ], [
-            'email.required' => 'وارد کردن ایمیل الزامی است.',
-            'email.email' => 'فرمت ایمیل وارد شده معتبر نیست.',
-            'password.required' => 'رمز عبور الزامی است.',
-            'password.min' => 'رمز عبور باید حداقل :min کاراکتر باشد.',
-            'cf-turnstile-response.required' => 'لطفاً کپچا را تکمیل کنید.',
-        ]);
-
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
         }
 
         $emailHash = hash('sha256', $request->email);
@@ -82,7 +65,7 @@ class UserController extends ApiController
         return view('users.register');
     }
 
-    public function store(Request $request)
+    public function store(registerRequest $request)
     {
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
@@ -92,56 +75,15 @@ class UserController extends ApiController
             return redirect()->route('dashboard');
         }
 
-        $validated = $request->validate([
-            'firstname' => 'required|string|max:255',
-            'lastname' => 'required|string|max:255',
-            'nickname' => 'required|string|max:255|unique:users,nickname',
-            'role' => 'required|string|max:255',
-            'unit' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email',
-            'password' => 'required|confirmed|min:6',
-        ], [
-            'firstname.required' => 'نام کوچک را وارد کنید.',
-            'firstname.string' => 'نام کوچک باید متنی باشد.',
-            'firstname.max' => 'نام کوچک نمی‌تواند بیش از ۲۵۵ کاراکتر باشد.',
-
-            'lastname.required' => 'نام خانوادگی را وارد کنید.',
-            'lastname.string' => 'نام خانوادگی باید متنی باشد.',
-            'lastname.max' => 'نام خانوادگی نمی‌تواند بیش از ۲۵۵ کاراکتر باشد.',
-
-            'nickname.required' => 'نام مستعار را وارد کنید.',
-            'nickname.string' => 'نام مستعار باید متنی باشد.',
-            'nickname.max' => 'نام مستعار نمی‌تواند بیش از ۲۵۵ کاراکتر باشد.',
-            'nickname.unique' => 'نام مستعار قبلاً استفاده شده است.',
-
-            'role.required' => 'نقش را وارد کنید.',
-            'role.string' => 'نقش باید متنی باشد.',
-            'role.max' => 'نقش نمی‌تواند بیش از ۲۵۵ کاراکتر باشد.',
-
-            'unit.required' => 'واحد را وارد کنید.',
-            'unit.string' => 'واحد باید متنی باشد.',
-            'unit.max' => 'واحد نمی‌تواند بیش از ۲۵۵ کاراکتر باشد.',
-
-            'email.required' => 'ایمیل را وارد کنید.',
-            'email.email' => 'فرمت ایمیل صحیح نیست.',
-            'email.max' => 'ایمیل نمی‌تواند بیش از ۲۵۵ کاراکتر باشد.',
-            'email.unique' => 'این ایمیل قبلاً ثبت شده است.',
-
-            'password.required' => 'رمز عبور را وارد کنید.',
-            'password.confirmed' => 'تأیید رمز عبور با رمز عبور مطابقت ندارد.',
-            'password.min' => 'رمز عبور باید حداقل ۶ کاراکتر باشد.',
-        ]);
-
-
         User::create([
-            'firstname' => $validated['firstname'],
-            'lastname' => $validated['lastname'],
-            'nickname' => $validated['nickname'],
-            'role' => $validated['role'],
-            'unit' => $validated['unit'],
-            'email' => $validated['email'],
-            'email_hash' => hash('SHA256', $validated['email']),
-            'password' => Hash::make($validated['password']),
+            'firstname' => $request['firstname'],
+            'lastname' => $request['lastname'],
+            'nickname' => $request['nickname'],
+            'role' => $request['role'],
+            'unit' => $request['unit'],
+            'email' => $request['email'],
+            'email_hash' => hash('SHA256', $request['email']),
+            'password' => Hash::make($request['password']),
         ]);
 
         return redirect()->route('users.all')->with('success', 'کاربر با موفقیت اضافه شد');
@@ -160,7 +102,7 @@ class UserController extends ApiController
         return view('users.modify', ['user' => $user]);
     }
 
-    public function modifySubmit(Request $request, $id)
+    public function modifySubmit(modifyRequest $request, $id)
     {
         if (Auth::user()->role != 'super_admin'){
             return redirect()->route('dashboard');
@@ -168,53 +110,14 @@ class UserController extends ApiController
 
         $user = User::findOrFail($id);
 
-        $validated = $request->validate([
-            'firstname' => 'required | string | max:255',
-            'lastname' => 'required | string | max:255',
-            'nickname' => 'required | string | max:255 | unique:users,nickname,' . $id,
-            'role' => 'required | string | max:255',
-            'unit' => 'required | string | max:255',
-            'email' => 'required | email | max:255 | unique:users,email,' . $id,
-        ], [
-            'firstname.required' => 'نام کوچک را وارد کنید.',
-            'firstname.string' => 'نام کوچک باید متنی باشد.',
-            'firstname.max' => 'نام کوچک نمی‌تواند بیش از ۲۵۵ کاراکتر باشد.',
-
-            'lastname.required' => 'نام خانوادگی را وارد کنید.',
-            'lastname.string' => 'نام خانوادگی باید متنی باشد.',
-            'lastname.max' => 'نام خانوادگی نمی‌تواند بیش از ۲۵۵ کاراکتر باشد.',
-
-            'nickname.required' => 'نام مستعار را وارد کنید.',
-            'nickname.string' => 'نام مستعار باید متنی باشد.',
-            'nickname.max' => 'نام مستعار نمی‌تواند بیش از ۲۵۵ کاراکتر باشد.',
-            'nickname.unique' => 'نام مستعار قبلاً استفاده شده است.',
-
-            'role.required' => 'نقش را وارد کنید.',
-            'role.string' => 'نقش باید متنی باشد.',
-            'role.max' => 'نقش نمی‌تواند بیش از ۲۵۵ کاراکتر باشد.',
-
-            'unit.required' => 'واحد را وارد کنید.',
-            'unit.string' => 'واحد باید متنی باشد.',
-            'unit.max' => 'واحد نمی‌تواند بیش از ۲۵۵ کاراکتر باشد.',
-
-            'email.required' => 'ایمیل را وارد کنید.',
-            'email.email' => 'فرمت ایمیل صحیح نیست.',
-            'email.max' => 'ایمیل نمی‌تواند بیش از ۲۵۵ کاراکتر باشد.',
-            'email.unique' => 'این ایمیل قبلاً ثبت شده است.',
-
-            'password.required' => 'رمز عبور را وارد کنید.',
-            'password.confirmed' => 'تأیید رمز عبور با رمز عبور مطابقت ندارد.',
-            'password.min' => 'رمز عبور باید حداقل ۶ کاراکتر باشد.',
-        ]);
-
         $user->update([
-            'firstname' => $validated['firstname'],
-            'lastname' => $validated['lastname'],
-            'nickname' => $validated['nickname'],
-            'role' => $validated['role'],
-            'unit' => $validated['unit'],
-            'email' => $validated['email'],
-            'email_hash' => hash('SHA256', $validated['email']),
+            'firstname' => $request['firstname'],
+            'lastname' => $request['lastname'],
+            'nickname' => $request['nickname'],
+            'role' => $request['role'],
+            'unit' => $request['unit'],
+            'email' => $request['email'],
+            'email_hash' => hash('SHA256', $request['email']),
         ]);
 
         return redirect()->route('users.all')->with('success', 'کاربر با موفقیت ویرایش شد');
@@ -250,34 +153,20 @@ class UserController extends ApiController
         return view('users.profile', compact('user'));
     }
 
-    public function change(Request $request)
+    public function change(profileRequest $request)
     {
         if (!Auth::check()) {
             return back()->with('error', 'لطفاً ابتدا وارد حساب کاربری خود شوید');
         }
 
-        $validatedData = $request->validate([
-            'current_password' => 'required',
-            'new_password' => 'required|min:6',
-            'confirm_new_password' => 'required|same:new_password',
-        ], [
-            'current_password.required' => 'وارد کردن رمز عبور فعلی الزامی است.',
-            'new_password.required' => 'وارد کردن رمز عبور جدید الزامی است.',
-            'new_password.min' => 'رمز عبور جدید باید حداقل ۶ کاراکتر باشد.',
-            'confirm_new_password.required' => 'تأیید رمز عبور جدید الزامی است.',
-            'confirm_new_password.same' => 'تأیید رمز عبور جدید با رمز عبور جدید مطابقت ندارد.',
-        ]);
-
-
-        $user = Auth::user();
-
-        if (!Hash::check($request->current_password, $user->password)) {
+        if (!Hash::check($request->current_password, Auth::user()->password)) {
             return back()
                 ->withErrors(['current_password' => 'رمز عبور فعلی نادرست است'])
                 ->withInput();
         }
 
-        $user->update([
+        
+        Auth::user()->update([
             'password' => Hash::make($request->new_password)
         ]);
 
@@ -300,8 +189,9 @@ class UserController extends ApiController
         return view('users/admin', ['users' => $users]);
     }
 
+    //................................................login.with.google..................
 
-    public function google_login(){
+    public function google_login(Request $request){
         return Socialite::driver('google')->redirect();
     }
 
